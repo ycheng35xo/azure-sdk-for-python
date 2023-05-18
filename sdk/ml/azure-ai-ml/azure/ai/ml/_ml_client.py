@@ -64,6 +64,8 @@ from azure.ai.ml._utils.utils import _is_https_url
 from azure.ai.ml.constants._common import AzureMLResourceType
 from azure.ai.ml.entities import (
     BatchDeployment,
+    ModelBatchDeployment,
+    PipelineComponentBatchDeployment,
     BatchEndpoint,
     Component,
     Compute,
@@ -214,6 +216,9 @@ class MLClient:
             )
         module_logger.debug("Cloud configured in MLClient: '%s'.", cloud_name)
 
+        # Add cloud information to kwargs
+        kwargs.update(_get_cloud_information_from_metadata(cloud_name))
+
         # registry_name is present when the operations need referring assets from registry.
         # the subscription, resource group, if provided, will be ignored and replaced by
         # whatever is received from the registry discovery service.
@@ -246,7 +251,6 @@ class MLClient:
 
         base_url = _get_base_url_from_metadata(cloud_name=cloud_name, is_local_mfe=True)
         self._base_url = base_url
-        kwargs.update(_get_cloud_information_from_metadata(cloud_name))
         self._kwargs = kwargs
 
         self._operation_container = OperationsContainer()
@@ -437,6 +441,7 @@ class MLClient:
             credentials=self._credential,
             requests_pipeline=self._requests_pipeline,
             service_client_09_2020_dataplanepreview=self._service_client_09_2020_dataplanepreview,
+            service_client_02_2023_preview=self._service_client_02_2023_preview,
             **ops_kwargs,
         )
         self._operation_container.add(AzureMLResourceType.ONLINE_DEPLOYMENT, self._online_deployments)
@@ -1035,6 +1040,18 @@ def _(entity: OnlineDeployment, operations, *args, **kwargs):
 
 @_begin_create_or_update.register(BatchDeployment)
 def _(entity: BatchDeployment, operations, *args, **kwargs):
+    module_logger.debug("Creating or updating batch_deployments")
+    return operations[AzureMLResourceType.BATCH_DEPLOYMENT].begin_create_or_update(entity, **kwargs)
+
+
+@_begin_create_or_update.register(ModelBatchDeployment)
+def _(entity: ModelBatchDeployment, operations, *args, **kwargs):
+    module_logger.debug("Creating or updating batch_deployments")
+    return operations[AzureMLResourceType.BATCH_DEPLOYMENT].begin_create_or_update(entity, **kwargs)
+
+
+@_begin_create_or_update.register(PipelineComponentBatchDeployment)
+def _(entity: PipelineComponentBatchDeployment, operations, *args, **kwargs):
     module_logger.debug("Creating or updating batch_deployments")
     return operations[AzureMLResourceType.BATCH_DEPLOYMENT].begin_create_or_update(entity, **kwargs)
 
