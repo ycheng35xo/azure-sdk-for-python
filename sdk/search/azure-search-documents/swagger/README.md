@@ -33,7 +33,7 @@ models-mode: msrest
 
 Generate all API versions currently shipped for this package
 
-``` yaml $(python)
+``` yaml
 batch:
   - tag: package-searchservice
   - tag: package-searchindex
