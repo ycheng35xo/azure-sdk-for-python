@@ -101,7 +101,6 @@ class IndexersOperations:
             indexer_name=indexer_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.reset.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -125,8 +124,6 @@ class IndexersOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    reset.metadata = {"url": "/indexers('{indexerName}')/search.reset"}
 
     @overload
     async def reset_docs(  # pylint: disable=inconsistent-return-statements
@@ -264,7 +261,6 @@ class IndexersOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.reset_docs.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -288,8 +284,6 @@ class IndexersOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    reset_docs.metadata = {"url": "/indexers('{indexerName}')/search.resetdocs"}
 
     @distributed_trace_async
     async def run(  # pylint: disable=inconsistent-return-statements
@@ -331,7 +325,6 @@ class IndexersOperations:
             indexer_name=indexer_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.run.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -355,8 +348,6 @@ class IndexersOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    run.metadata = {"url": "/indexers('{indexerName}')/search.run"}
 
     @overload
     async def create_or_update(
@@ -544,7 +535,6 @@ class IndexersOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -576,8 +566,6 @@ class IndexersOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    create_or_update.metadata = {"url": "/indexers('{indexerName}')"}
 
     @distributed_trace_async
     async def delete(  # pylint: disable=inconsistent-return-statements
@@ -632,7 +620,6 @@ class IndexersOperations:
             if_match=if_match,
             if_none_match=if_none_match,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -656,8 +643,6 @@ class IndexersOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/indexers('{indexerName}')"}
 
     @distributed_trace_async
     async def get(
@@ -699,7 +684,6 @@ class IndexersOperations:
             indexer_name=indexer_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -727,8 +711,6 @@ class IndexersOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/indexers('{indexerName}')"}
 
     @distributed_trace_async
     async def list(
@@ -772,7 +754,6 @@ class IndexersOperations:
             select=select,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.list.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -800,8 +781,6 @@ class IndexersOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    list.metadata = {"url": "/indexers"}
 
     @overload
     async def create(
@@ -914,7 +893,6 @@ class IndexersOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -942,8 +920,6 @@ class IndexersOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    create.metadata = {"url": "/indexers"}
 
     @distributed_trace_async
     async def get_status(
@@ -985,7 +961,6 @@ class IndexersOperations:
             indexer_name=indexer_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get_status.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -1013,5 +988,3 @@ class IndexersOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get_status.metadata = {"url": "/indexers('{indexerName}')/search.status"}

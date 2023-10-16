@@ -316,7 +316,6 @@ class AliasesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -344,8 +343,6 @@ class AliasesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    create.metadata = {"url": "/aliases"}
 
     @distributed_trace
     def list(
@@ -386,7 +383,6 @@ class AliasesOperations:
                 request = build_list_request(
                     x_ms_client_request_id=_x_ms_client_request_id,
                     api_version=api_version,
-                    template_url=self.list.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
@@ -445,8 +441,6 @@ class AliasesOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list.metadata = {"url": "/aliases"}
 
     @overload
     def create_or_update(
@@ -608,7 +602,6 @@ class AliasesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -640,8 +633,6 @@ class AliasesOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    create_or_update.metadata = {"url": "/aliases('{aliasName}')"}
 
     @distributed_trace
     def delete(  # pylint: disable=inconsistent-return-statements
@@ -697,7 +688,6 @@ class AliasesOperations:
             if_match=if_match,
             if_none_match=if_none_match,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -721,8 +711,6 @@ class AliasesOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/aliases('{aliasName}')"}
 
     @distributed_trace
     def get(
@@ -764,7 +752,6 @@ class AliasesOperations:
             alias_name=alias_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -792,5 +779,3 @@ class AliasesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/aliases('{aliasName}')"}

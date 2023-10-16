@@ -492,7 +492,7 @@ class AzureMachineLearningSkill(SearchIndexerSkill):  # pylint: disable=too-many
     :vartype authentication_key: str
     :ivar resource_id: (Required for token authentication). The Azure Resource Manager resource ID
      of the AML service. It should be in the format
-     subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.MachineLearningServices/workspaces/{workspace-name}/services/{service_name}.
+     subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.MachineLearningServices/workspaces/{workspace-name}/services/{service_name}.  # pylint: disable=line-too-long
     :vartype resource_id: str
     :ivar timeout: (Optional) When specified, indicates the timeout for the http client making the
      API call.
@@ -570,7 +570,7 @@ class AzureMachineLearningSkill(SearchIndexerSkill):  # pylint: disable=too-many
         :paramtype authentication_key: str
         :keyword resource_id: (Required for token authentication). The Azure Resource Manager resource
          ID of the AML service. It should be in the format
-         subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.MachineLearningServices/workspaces/{workspace-name}/services/{service_name}.
+         subscriptions/{guid}/resourceGroups/{resource-group-name}/Microsoft.MachineLearningServices/workspaces/{workspace-name}/services/{service_name}.  # pylint: disable=line-too-long
         :paramtype resource_id: str
         :keyword timeout: (Optional) When specified, indicates the timeout for the http client making
          the API call.
@@ -3069,7 +3069,7 @@ class HnswParameters(_serialization.Model):
     :vartype ef_construction: int
     :ivar ef_search: The size of the dynamic list containing the nearest neighbors, which is used
      during search time. Increasing this parameter may improve search results, at the expense of
-     slower search. Increasing this parameter leads to diminishing returns..
+     slower search. At a certain point, increasing this parameter leads to diminishing returns.
     :vartype ef_search: int
     :ivar metric: The similarity metric to use for vector comparisons. Known values are: "cosine",
      "euclidean", and "dotProduct".
@@ -3111,7 +3111,7 @@ class HnswParameters(_serialization.Model):
         :paramtype ef_construction: int
         :keyword ef_search: The size of the dynamic list containing the nearest neighbors, which is
          used during search time. Increasing this parameter may improve search results, at the expense
-         of slower search. Increasing this parameter leads to diminishing returns..
+         of slower search. At a certain point, increasing this parameter leads to diminishing returns.
         :paramtype ef_search: int
         :keyword metric: The similarity metric to use for vector comparisons. Known values are:
          "cosine", "euclidean", and "dotProduct".
@@ -3163,7 +3163,8 @@ class VectorSearchAlgorithmConfiguration(_serialization.Model):
 
 class HnswVectorSearchAlgorithmConfiguration(VectorSearchAlgorithmConfiguration):
     """Contains configuration options specific to the hnsw approximate nearest neighbors algorithm
-    used during indexing time.
+    used during indexing and querying. The hnsw algorithm offers a tunable trade-off between search
+    speed and accuracy.
 
     All required parameters must be populated in order to send to Azure.
 
@@ -7068,7 +7069,7 @@ class SearchIndexerDataUserAssignedIdentity(SearchIndexerDataIdentity):
     :vartype odata_type: str
     :ivar user_assigned_identity: The fully qualified Azure resource Id of a user assigned managed
      identity typically in the form
-     "/subscriptions/12345678-1234-1234-1234-1234567890ab/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myId"
+     "/subscriptions/12345678-1234-1234-1234-1234567890ab/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myId"  # pylint: disable=line-too-long
      that should have been assigned to the search service. Required.
     :vartype user_assigned_identity: str
     """
@@ -7087,7 +7088,7 @@ class SearchIndexerDataUserAssignedIdentity(SearchIndexerDataIdentity):
         """
         :keyword user_assigned_identity: The fully qualified Azure resource Id of a user assigned
          managed identity typically in the form
-         "/subscriptions/12345678-1234-1234-1234-1234567890ab/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myId"
+         "/subscriptions/12345678-1234-1234-1234-1234567890ab/resourceGroups/rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myId"  # pylint: disable=line-too-long
          that should have been assigned to the search service. Required.
         :paramtype user_assigned_identity: str
         """
@@ -7351,54 +7352,6 @@ class SearchIndexerKnowledgeStoreFileProjectionSelector(SearchIndexerKnowledgeSt
     :vartype storage_container: str
     """
 
-    _validation = {
-        "storage_container": {"required": True},
-    }
-
-    _attribute_map = {
-        "reference_key_name": {"key": "referenceKeyName", "type": "str"},
-        "generated_key_name": {"key": "generatedKeyName", "type": "str"},
-        "source": {"key": "source", "type": "str"},
-        "source_context": {"key": "sourceContext", "type": "str"},
-        "inputs": {"key": "inputs", "type": "[InputFieldMappingEntry]"},
-        "storage_container": {"key": "storageContainer", "type": "str"},
-    }
-
-    def __init__(
-        self,
-        *,
-        storage_container: str,
-        reference_key_name: Optional[str] = None,
-        generated_key_name: Optional[str] = None,
-        source: Optional[str] = None,
-        source_context: Optional[str] = None,
-        inputs: Optional[List["_models.InputFieldMappingEntry"]] = None,
-        **kwargs: Any
-    ) -> None:
-        """
-        :keyword reference_key_name: Name of reference key to different projection.
-        :paramtype reference_key_name: str
-        :keyword generated_key_name: Name of generated key to store projection under.
-        :paramtype generated_key_name: str
-        :keyword source: Source data to project.
-        :paramtype source: str
-        :keyword source_context: Source context for complex projections.
-        :paramtype source_context: str
-        :keyword inputs: Nested inputs for complex projections.
-        :paramtype inputs: list[~azure.search.documents.indexes.models.InputFieldMappingEntry]
-        :keyword storage_container: Blob container to store projections in. Required.
-        :paramtype storage_container: str
-        """
-        super().__init__(
-            reference_key_name=reference_key_name,
-            generated_key_name=generated_key_name,
-            source=source,
-            source_context=source_context,
-            inputs=inputs,
-            storage_container=storage_container,
-            **kwargs
-        )
-
 
 class SearchIndexerKnowledgeStoreObjectProjectionSelector(SearchIndexerKnowledgeStoreBlobProjectionSelector):
     """Projection definition for what data to store in Azure Blob.
@@ -7418,54 +7371,6 @@ class SearchIndexerKnowledgeStoreObjectProjectionSelector(SearchIndexerKnowledge
     :ivar storage_container: Blob container to store projections in. Required.
     :vartype storage_container: str
     """
-
-    _validation = {
-        "storage_container": {"required": True},
-    }
-
-    _attribute_map = {
-        "reference_key_name": {"key": "referenceKeyName", "type": "str"},
-        "generated_key_name": {"key": "generatedKeyName", "type": "str"},
-        "source": {"key": "source", "type": "str"},
-        "source_context": {"key": "sourceContext", "type": "str"},
-        "inputs": {"key": "inputs", "type": "[InputFieldMappingEntry]"},
-        "storage_container": {"key": "storageContainer", "type": "str"},
-    }
-
-    def __init__(
-        self,
-        *,
-        storage_container: str,
-        reference_key_name: Optional[str] = None,
-        generated_key_name: Optional[str] = None,
-        source: Optional[str] = None,
-        source_context: Optional[str] = None,
-        inputs: Optional[List["_models.InputFieldMappingEntry"]] = None,
-        **kwargs: Any
-    ) -> None:
-        """
-        :keyword reference_key_name: Name of reference key to different projection.
-        :paramtype reference_key_name: str
-        :keyword generated_key_name: Name of generated key to store projection under.
-        :paramtype generated_key_name: str
-        :keyword source: Source data to project.
-        :paramtype source: str
-        :keyword source_context: Source context for complex projections.
-        :paramtype source_context: str
-        :keyword inputs: Nested inputs for complex projections.
-        :paramtype inputs: list[~azure.search.documents.indexes.models.InputFieldMappingEntry]
-        :keyword storage_container: Blob container to store projections in. Required.
-        :paramtype storage_container: str
-        """
-        super().__init__(
-            reference_key_name=reference_key_name,
-            generated_key_name=generated_key_name,
-            source=source,
-            source_context=source_context,
-            inputs=inputs,
-            storage_container=storage_container,
-            **kwargs
-        )
 
 
 class SearchIndexerKnowledgeStoreProjection(_serialization.Model):
@@ -9582,7 +9487,7 @@ class VectorSearch(_serialization.Model):
     """Contains configuration options related to vector search.
 
     :ivar algorithm_configurations: Contains configuration options specific to the algorithm used
-     during indexing time.
+     during indexing and/or querying.
     :vartype algorithm_configurations:
      list[~azure.search.documents.indexes.models.VectorSearchAlgorithmConfiguration]
     """
@@ -9599,7 +9504,7 @@ class VectorSearch(_serialization.Model):
     ) -> None:
         """
         :keyword algorithm_configurations: Contains configuration options specific to the algorithm
-         used during indexing time.
+         used during indexing and/or querying.
         :paramtype algorithm_configurations:
          list[~azure.search.documents.indexes.models.VectorSearchAlgorithmConfiguration]
         """

@@ -461,7 +461,6 @@ class DocumentsOperations:
         request = build_count_request(
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.count.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -490,8 +489,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    count.metadata = {"url": "/docs/$count"}
 
     @distributed_trace
     def search_get(
@@ -622,7 +619,6 @@ class DocumentsOperations:
             semantic_fields=_semantic_fields,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.search_get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -651,8 +647,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    search_get.metadata = {"url": "/docs"}
 
     @overload
     def search_post(
@@ -765,7 +759,6 @@ class DocumentsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.search_post.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -794,8 +787,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    search_post.metadata = {"url": "/docs/search.post.search"}
 
     @distributed_trace
     def get(
@@ -845,7 +836,6 @@ class DocumentsOperations:
             selected_fields=selected_fields,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -874,8 +864,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/docs('{key}')"}
 
     @distributed_trace
     def suggest_get(
@@ -957,7 +945,6 @@ class DocumentsOperations:
             top=_top,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.suggest_get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -986,8 +973,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    suggest_get.metadata = {"url": "/docs/search.suggest"}
 
     @overload
     def suggest_post(
@@ -1100,7 +1085,6 @@ class DocumentsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.suggest_post.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -1129,8 +1113,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    suggest_post.metadata = {"url": "/docs/search.post.suggest"}
 
     @distributed_trace
     def index(
@@ -1179,7 +1161,6 @@ class DocumentsOperations:
             api_version=api_version,
             content_type=content_type,
             json=_json,
-            template_url=self.index.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -1212,8 +1193,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    index.metadata = {"url": "/docs/search.index"}
 
     @distributed_trace
     def autocomplete_get(
@@ -1291,7 +1270,6 @@ class DocumentsOperations:
             search_fields=_search_fields,
             top=_top,
             api_version=api_version,
-            template_url=self.autocomplete_get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -1320,8 +1298,6 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    autocomplete_get.metadata = {"url": "/docs/search.autocomplete"}
 
     @overload
     def autocomplete_post(
@@ -1434,7 +1410,6 @@ class DocumentsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.autocomplete_post.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -1463,5 +1438,3 @@ class DocumentsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    autocomplete_post.metadata = {"url": "/docs/search.post.autocomplete"}

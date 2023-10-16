@@ -89,7 +89,6 @@ class SearchServiceClientOperationsMixin(SearchServiceClientMixinABC):
         request = build_get_service_statistics_request(
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get_service_statistics.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -117,5 +116,3 @@ class SearchServiceClientOperationsMixin(SearchServiceClientMixinABC):
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get_service_statistics.metadata = {"url": "/servicestats"}

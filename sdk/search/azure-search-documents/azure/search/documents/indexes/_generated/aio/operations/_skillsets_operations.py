@@ -246,7 +246,6 @@ class SkillsetsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -278,8 +277,6 @@ class SkillsetsOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    create_or_update.metadata = {"url": "/skillsets('{skillsetName}')"}
 
     @distributed_trace_async
     async def delete(  # pylint: disable=inconsistent-return-statements
@@ -334,7 +331,6 @@ class SkillsetsOperations:
             if_match=if_match,
             if_none_match=if_none_match,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -358,8 +354,6 @@ class SkillsetsOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/skillsets('{skillsetName}')"}
 
     @distributed_trace_async
     async def get(
@@ -401,7 +395,6 @@ class SkillsetsOperations:
             skillset_name=skillset_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -429,8 +422,6 @@ class SkillsetsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/skillsets('{skillsetName}')"}
 
     @distributed_trace_async
     async def list(
@@ -474,7 +465,6 @@ class SkillsetsOperations:
             select=select,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.list.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -502,8 +492,6 @@ class SkillsetsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    list.metadata = {"url": "/skillsets"}
 
     @overload
     async def create(
@@ -618,7 +606,6 @@ class SkillsetsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -646,8 +633,6 @@ class SkillsetsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    create.metadata = {"url": "/skillsets"}
 
     @distributed_trace_async
     async def reset_skills(  # pylint: disable=inconsistent-return-statements
@@ -700,7 +685,6 @@ class SkillsetsOperations:
             api_version=api_version,
             content_type=content_type,
             json=_json,
-            template_url=self.reset_skills.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -724,5 +708,3 @@ class SkillsetsOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    reset_skills.metadata = {"url": "/skillsets('{skillsetName}')/search.resetskills"}

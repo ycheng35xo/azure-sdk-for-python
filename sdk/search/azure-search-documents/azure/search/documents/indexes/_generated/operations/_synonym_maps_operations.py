@@ -369,7 +369,6 @@ class SynonymMapsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -401,8 +400,6 @@ class SynonymMapsOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    create_or_update.metadata = {"url": "/synonymmaps('{synonymMapName}')"}
 
     @distributed_trace
     def delete(  # pylint: disable=inconsistent-return-statements
@@ -457,7 +454,6 @@ class SynonymMapsOperations:
             if_match=if_match,
             if_none_match=if_none_match,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -481,8 +477,6 @@ class SynonymMapsOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/synonymmaps('{synonymMapName}')"}
 
     @distributed_trace
     def get(
@@ -524,7 +518,6 @@ class SynonymMapsOperations:
             synonym_map_name=synonym_map_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -552,8 +545,6 @@ class SynonymMapsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/synonymmaps('{synonymMapName}')"}
 
     @distributed_trace
     def list(
@@ -597,7 +588,6 @@ class SynonymMapsOperations:
             select=select,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.list.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -625,8 +615,6 @@ class SynonymMapsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    list.metadata = {"url": "/synonymmaps"}
 
     @overload
     def create(
@@ -739,7 +727,6 @@ class SynonymMapsOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -767,5 +754,3 @@ class SynonymMapsOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    create.metadata = {"url": "/synonymmaps"}

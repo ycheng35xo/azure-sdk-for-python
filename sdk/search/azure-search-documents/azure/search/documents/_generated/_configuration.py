@@ -8,13 +8,12 @@
 
 from typing import Any
 
-from azure.core.configuration import Configuration
 from azure.core.pipeline import policies
 
 VERSION = "unknown"
 
 
-class SearchIndexClientConfiguration(Configuration):  # pylint: disable=too-many-instance-attributes,name-too-long
+class SearchIndexClientConfiguration:  # pylint: disable=too-many-instance-attributes,name-too-long
     """Configuration for SearchIndexClient.
 
     Note that all parameters used to create this instance are saved as instance
@@ -30,7 +29,6 @@ class SearchIndexClientConfiguration(Configuration):  # pylint: disable=too-many
     """
 
     def __init__(self, endpoint: str, index_name: str, **kwargs: Any) -> None:
-        super(SearchIndexClientConfiguration, self).__init__(**kwargs)
         api_version: str = kwargs.pop("api_version", "2023-07-01-Preview")
 
         if endpoint is None:
@@ -42,6 +40,7 @@ class SearchIndexClientConfiguration(Configuration):  # pylint: disable=too-many
         self.index_name = index_name
         self.api_version = api_version
         kwargs.setdefault("sdk_moniker", "search-documents/{}".format(VERSION))
+        self.polling_interval = kwargs.get("polling_interval", 30)
         self._configure(**kwargs)
 
     def _configure(self, **kwargs: Any) -> None:

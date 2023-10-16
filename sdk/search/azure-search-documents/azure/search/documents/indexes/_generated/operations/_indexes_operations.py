@@ -382,7 +382,6 @@ class IndexesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -410,8 +409,6 @@ class IndexesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    create.metadata = {"url": "/indexes"}
 
     @distributed_trace
     def list(
@@ -457,7 +454,6 @@ class IndexesOperations:
                     select=select,
                     x_ms_client_request_id=_x_ms_client_request_id,
                     api_version=api_version,
-                    template_url=self.list.metadata["url"],
                     headers=_headers,
                     params=_params,
                 )
@@ -516,8 +512,6 @@ class IndexesOperations:
             return pipeline_response
 
         return ItemPaged(get_next, extract_data)
-
-    list.metadata = {"url": "/indexes"}
 
     @overload
     def create_or_update(
@@ -701,7 +695,6 @@ class IndexesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -733,8 +726,6 @@ class IndexesOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    create_or_update.metadata = {"url": "/indexes('{indexName}')"}
 
     @distributed_trace
     def delete(  # pylint: disable=inconsistent-return-statements
@@ -791,7 +782,6 @@ class IndexesOperations:
             if_match=if_match,
             if_none_match=if_none_match,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -815,8 +805,6 @@ class IndexesOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/indexes('{indexName}')"}
 
     @distributed_trace
     def get(
@@ -858,7 +846,6 @@ class IndexesOperations:
             index_name=index_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -886,8 +873,6 @@ class IndexesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/indexes('{indexName}')"}
 
     @distributed_trace
     def get_statistics(
@@ -929,7 +914,6 @@ class IndexesOperations:
             index_name=index_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get_statistics.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -957,8 +941,6 @@ class IndexesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get_statistics.metadata = {"url": "/indexes('{indexName}')/search.stats"}
 
     @overload
     def analyze(
@@ -1081,7 +1063,6 @@ class IndexesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.analyze.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -1109,5 +1090,3 @@ class IndexesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    analyze.metadata = {"url": "/indexes('{indexName}')/search.analyze"}

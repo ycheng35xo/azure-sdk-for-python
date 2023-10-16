@@ -230,7 +230,6 @@ class DataSourcesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create_or_update.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -262,8 +261,6 @@ class DataSourcesOperations:
             return cls(pipeline_response, deserialized, {})  # type: ignore
 
         return deserialized  # type: ignore
-
-    create_or_update.metadata = {"url": "/datasources('{dataSourceName}')"}
 
     @distributed_trace_async
     async def delete(  # pylint: disable=inconsistent-return-statements
@@ -318,7 +315,6 @@ class DataSourcesOperations:
             if_match=if_match,
             if_none_match=if_none_match,
             api_version=api_version,
-            template_url=self.delete.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -342,8 +338,6 @@ class DataSourcesOperations:
 
         if cls:
             return cls(pipeline_response, None, {})
-
-    delete.metadata = {"url": "/datasources('{dataSourceName}')"}
 
     @distributed_trace_async
     async def get(
@@ -385,7 +379,6 @@ class DataSourcesOperations:
             data_source_name=data_source_name,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.get.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -413,8 +406,6 @@ class DataSourcesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    get.metadata = {"url": "/datasources('{dataSourceName}')"}
 
     @distributed_trace_async
     async def list(
@@ -458,7 +449,6 @@ class DataSourcesOperations:
             select=select,
             x_ms_client_request_id=_x_ms_client_request_id,
             api_version=api_version,
-            template_url=self.list.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -486,8 +476,6 @@ class DataSourcesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    list.metadata = {"url": "/datasources"}
 
     @overload
     async def create(
@@ -600,7 +588,6 @@ class DataSourcesOperations:
             content_type=content_type,
             json=_json,
             content=_content,
-            template_url=self.create.metadata["url"],
             headers=_headers,
             params=_params,
         )
@@ -628,5 +615,3 @@ class DataSourcesOperations:
             return cls(pipeline_response, deserialized, {})
 
         return deserialized
-
-    create.metadata = {"url": "/datasources"}
