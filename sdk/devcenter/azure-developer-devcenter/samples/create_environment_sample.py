@@ -31,6 +31,7 @@ from azure.developer.devcenter import DevCenterClient
 from azure.identity import DefaultAzureCredential
 from azure.core.exceptions import HttpResponseError
 
+
 def main():
     logging.basicConfig(level=logging.DEBUG)
     LOG = logging.getLogger()
@@ -47,19 +48,23 @@ def main():
     client = DevCenterClient(endpoint, credential=DefaultAzureCredential())
 
     # Fetch control plane resource dependencies
-    target_project_name = list(client.dev_center.list_projects(top=1))[0]['name']
-    target_catalog_name = list(client.environments.list_catalog_items(target_project_name, top=1))[0]['catalogName']
-    target_catalog_item_name = list(client.environments.list_catalog_items(target_project_name, top=1))[0]['name']
-    target_environment_type_name = list(client.environments.list_environment_types(target_project_name, top=1))[0]['name']
+    target_project_name = list(client.dev_center.list_projects(top=1))[0]["name"]
+    target_catalog_name = list(client.environments.list_catalog_items(target_project_name, top=1))[0]["catalogName"]
+    target_catalog_item_name = list(client.environments.list_catalog_items(target_project_name, top=1))[0]["name"]
+    target_environment_type_name = list(client.environments.list_environment_types(target_project_name, top=1))[0][
+        "name"
+    ]
 
     # Stand up a new environment
-    create_response = client.environments.begin_create_or_update_environment(target_project_name,
-                                                       "Dev_Environment",
-                                                       {
-                                                        "catalogName": target_catalog_name,
-                                                        "catalogItemName": target_catalog_item_name,
-                                                        "environmentType": target_environment_type_name
-                                                       })
+    create_response = client.environments.begin_create_or_update_environment(
+        target_project_name,
+        "Dev_Environment",
+        {
+            "catalogName": target_catalog_name,
+            "catalogItemName": target_catalog_item_name,
+            "environmentType": target_environment_type_name,
+        },
+    )
     environment_result = create_response.result()
 
     LOG.info(f"Provisioned environment with status {environment_result['provisioningState']}.")

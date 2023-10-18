@@ -8,6 +8,7 @@ import os
 from testcase import DevcenterTest, DevcenterPowerShellPreparer
 from devtools_testutils import recorded_by_proxy
 
+
 class TestDevcenterSmoke(DevcenterTest):
     @DevcenterPowerShellPreparer()
     @recorded_by_proxy
