@@ -27,6 +27,7 @@ extends:
   template: ../../eng/pipelines/templates/stages/archetype-sdk-client.yml
   parameters:
     ServiceDirectory: schemaregistry
+    BuildTargetingString: azure-schemaregistry
     MatrixConfigs:
       - Name: schemaregistry_ci_matrix
         Path: eng/pipelines/templates/stages/platform-matrix-metricsadvisor_tables.json
