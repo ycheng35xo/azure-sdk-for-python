@@ -15,8 +15,8 @@ typing-extensions<=4.6.3
 pyproject-api<1.6
 
 # requirements leveraged for testing
-pytest==7.3.1
-pytest-cov==4.0.0
+pytest==7.4.1
+pytest-cov==4.1.0
 coverage==7.2.5
 
 # locking packages defined as deps from azure-sdk-tools or azure-devtools
