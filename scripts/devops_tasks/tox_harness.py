@@ -237,20 +237,20 @@ def execute_tox_serial(tox_command_tuples):
         if result is not None and result != 0:
             return_code = result
 
-        if in_ci():
-            collect_log_files(cmd_tuple[1])
+        # if in_ci():
+        #     collect_log_files(cmd_tuple[1])
 
-            # cleanup_tox_environments(tox_dir, cmd_tuple[0])
+        #     cleanup_tox_environments(tox_dir, cmd_tuple[0])
 
-            # if os.path.exists(clone_dir):
-            #     try:
-            #         cleanup_directory(clone_dir)
-            #     except Exception as e:
-            #         # git has a permissions problem. one of the files it drops
-            #         # cannot be removed as no one has the permission to do so.
-            #         # lets log just in case, but this should really only affect windows machines.
-            #         logging.info(e)
-            #         pass
+        #     if os.path.exists(clone_dir):
+        #         try:
+        #             cleanup_directory(clone_dir)
+        #         except Exception as e:
+        #             # git has a permissions problem. one of the files it drops
+        #             # cannot be removed as no one has the permission to do so.
+        #             # lets log just in case, but this should really only affect windows machines.
+        #             logging.info(e)
+        #             pass
 
     return return_code
 
