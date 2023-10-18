@@ -553,9 +553,11 @@ def error_handler_git_access(func, path, exc):
     """
 
     if not os.access(path, os.W_OK):
+        logging.error(f"Resolving an access issue against {path}.")
         os.chmod(path, stat.S_IWUSR)
         func(path)
     else:
+        logging.error(f"Unable to resolve access issue while cleaning up {path}. Raising.")
         raise
 
 

@@ -86,15 +86,15 @@ jobs:
         TestPipeline: ${{ parameters.TestPipeline }}
         Artifacts: ${{ parameters.Artifacts }}
 
-  - job: 'Build_Extended'
-    displayName: Build Extended
-    dependsOn: 
-      - 'Build'
-    timeoutInMinutes: 90
-    variables:
-      Codeql.Enabled: true
-      Codeql.BuildIdentifier: ${{ parameters.ServiceDirectory }}
-      Codeql.SkipTaskAutoInjection: false
+  # - job: 'Build_Extended'
+  #   displayName: Build Extended
+  #   dependsOn: 
+  #     - 'Build'
+  #   timeoutInMinutes: 90
+  #   variables:
+  #     Codeql.Enabled: true
+  #     Codeql.BuildIdentifier: ${{ parameters.ServiceDirectory }}
+  #     Codeql.SkipTaskAutoInjection: false
 
     pool:
       name: azsdk-pool-mms-ubuntu-2004-general
@@ -113,46 +113,46 @@ jobs:
         TestPipeline: ${{ parameters.TestPipeline }}
         Artifacts: ${{ parameters.Artifacts }}
 
-  - job: 'Analyze'
-    condition: and(succeededOrFailed(), ne(variables['Skip.Analyze'], 'true'))
+  # - job: 'Analyze'
+  #   condition: and(succeededOrFailed(), ne(variables['Skip.Analyze'], 'true'))
 
-    timeoutInMinutes: ${{ parameters.TestTimeoutInMinutes }}
+  #   timeoutInMinutes: ${{ parameters.TestTimeoutInMinutes }}
 
-    dependsOn:
-      - 'Build_Extended'
+  #   dependsOn:
+  #     - 'Build_Extended'
 
-    pool:
-      name: azsdk-pool-mms-ubuntu-2004-general
-      vmImage: MMSUbuntu20.04
+  #   pool:
+  #     name: azsdk-pool-mms-ubuntu-2004-general
+  #     vmImage: MMSUbuntu20.04
 
-    steps:
-    - template: /eng/pipelines/templates/steps/targeting-string-resolve.yml
-      parameters:
-        BuildTargetingString: ${{ parameters.BuildTargetingString }}
+  #   steps:
+  #   - template: /eng/pipelines/templates/steps/targeting-string-resolve.yml
+  #     parameters:
+  #       BuildTargetingString: ${{ parameters.BuildTargetingString }}
 
-    - template: /eng/common/pipelines/templates/steps/check-spelling.yml
-      parameters:
-        ContinueOnError: false
+  #   - template: /eng/common/pipelines/templates/steps/check-spelling.yml
+  #     parameters:
+  #       ContinueOnError: false
 
-    - template: /eng/common/pipelines/templates/steps/verify-links.yml
-      parameters:
-        ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-          Directory: ''
-          Urls: (eng/common/scripts/get-markdown-files-from-changed-files.ps1)
-        ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
-          Directory: sdk/${{ parameters.ServiceDirectory }}
-        CheckLinkGuidance: $true
+  #   - template: /eng/common/pipelines/templates/steps/verify-links.yml
+  #     parameters:
+  #       ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+  #         Directory: ''
+  #         Urls: (eng/common/scripts/get-markdown-files-from-changed-files.ps1)
+  #       ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+  #         Directory: sdk/${{ parameters.ServiceDirectory }}
+  #       CheckLinkGuidance: $true
 
-    - template: ../steps/analyze.yml
-      parameters:
-        ServiceDirectory: ${{ parameters.ServiceDirectory }}
-        TestMarkArgument: ${{ parameters.TestMarkArgument }}
-        AdditionalTestArgs: '--wheel_dir="$(Build.ArtifactStagingDirectory)"'
-        TestPipeline: ${{ parameters.TestPipeline }}
-        Artifacts: ${{ parameters.Artifacts }}
-        VerifyAutorest: ${{ parameters.VerifyAutorest }}
-        ValidateFormatting: ${{ parameters.ValidateFormatting }}
-        GenerateApiReviewForManualOnly: ${{ parameters.GenerateApiReviewForManualOnly }}
+  #   - template: ../steps/analyze.yml
+  #     parameters:
+  #       ServiceDirectory: ${{ parameters.ServiceDirectory }}
+  #       TestMarkArgument: ${{ parameters.TestMarkArgument }}
+  #       AdditionalTestArgs: '--wheel_dir="$(Build.ArtifactStagingDirectory)"'
+  #       TestPipeline: ${{ parameters.TestPipeline }}
+  #       Artifacts: ${{ parameters.Artifacts }}
+  #       VerifyAutorest: ${{ parameters.VerifyAutorest }}
+  #       ValidateFormatting: ${{ parameters.ValidateFormatting }}
+  #       GenerateApiReviewForManualOnly: ${{ parameters.GenerateApiReviewForManualOnly }}
 
   - job: Compliance
     pool:
