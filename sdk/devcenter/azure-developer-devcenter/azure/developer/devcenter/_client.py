@@ -32,8 +32,8 @@ class DevCenterClient:  # pylint: disable=client-accepts-api-version-keyword
     :ivar deployment_environments: DeploymentEnvironmentsOperations operations
     :vartype deployment_environments:
      azure.developer.devcenter.operations.DeploymentEnvironmentsOperations
-    :param endpoint: The DevCenter-specific URI to operate on. Required.
-    :type endpoint: str
+    :param dev_center_endpoint: The DevCenter-specific URI to operate on. Required.
+    :type dev_center_endpoint: str
     :param credential: Credential needed for the client to connect to Azure. Required.
     :type credential: ~azure.core.credentials.TokenCredential
     :keyword api_version: The API version to use for this operation. Default value is "2023-04-01".
@@ -43,9 +43,11 @@ class DevCenterClient:  # pylint: disable=client-accepts-api-version-keyword
      Retry-After header is present.
     """
 
-    def __init__(self, endpoint: str, credential: "TokenCredential", **kwargs: Any) -> None:
-        _endpoint = "{endpoint}"
-        self._config = DevCenterClientConfiguration(endpoint=endpoint, credential=credential, **kwargs)
+    def __init__(self, dev_center_endpoint: str, credential: "TokenCredential", **kwargs: Any) -> None:
+        _endpoint = "{devCenterEndpoint}"
+        self._config = DevCenterClientConfiguration(
+            dev_center_endpoint=dev_center_endpoint, credential=credential, **kwargs
+        )
         _policies = kwargs.pop("policies", None)
         if _policies is None:
             _policies = [
@@ -94,11 +96,13 @@ class DevCenterClient:  # pylint: disable=client-accepts-api-version-keyword
 
         request_copy = deepcopy(request)
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         request_copy.url = self._client.format_url(request_copy.url, **path_format_arguments)
-        return self._client.send_request(request_copy, **kwargs)
+        return self._client.send_request(request_copy, **kwargs)  # type: ignore
 
     def close(self) -> None:
         self._client.close()

@@ -45,14 +45,14 @@ from ...operations._operations import (
     build_dev_boxes_delay_action_request,
     build_dev_boxes_delay_all_actions_request,
     build_dev_boxes_delete_dev_box_request,
-    build_dev_boxes_get_action_request,
+    build_dev_boxes_get_dev_box_action_request,
     build_dev_boxes_get_dev_box_request,
     build_dev_boxes_get_pool_request,
     build_dev_boxes_get_remote_connection_request,
     build_dev_boxes_get_schedule_request,
-    build_dev_boxes_list_actions_request,
     build_dev_boxes_list_all_dev_boxes_by_user_request,
     build_dev_boxes_list_all_dev_boxes_request,
+    build_dev_boxes_list_dev_box_actions_request,
     build_dev_boxes_list_dev_boxes_request,
     build_dev_boxes_list_pools_request,
     build_dev_boxes_list_schedules_request,
@@ -132,7 +132,7 @@ class DevCenterOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_center_list_projects_request(
+                _request = build_dev_center_list_projects_request(
                     filter=filter,
                     top=top,
                     api_version=self._config.api_version,
@@ -140,11 +140,11 @@ class DevCenterOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -156,17 +156,17 @@ class DevCenterOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -176,11 +176,11 @@ class DevCenterOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -230,20 +230,22 @@ class DevCenterOperations:
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_center_get_project_request(
+        _request = build_dev_center_get_project_request(
             project_name=project_name,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -263,9 +265,9 @@ class DevCenterOperations:
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
 
 class DevBoxesOperations:  # pylint: disable=too-many-public-methods
@@ -369,7 +371,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_list_pools_request(
+                _request = build_dev_boxes_list_pools_request(
                     project_name=project_name,
                     filter=filter,
                     top=top,
@@ -378,11 +380,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -394,17 +396,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -414,11 +416,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -510,7 +512,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_get_pool_request(
+        _request = build_dev_boxes_get_pool_request(
             project_name=project_name,
             pool_name=pool_name,
             api_version=self._config.api_version,
@@ -518,13 +520,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -544,9 +548,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace
     def list_schedules(
@@ -605,7 +609,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_list_schedules_request(
+                _request = build_dev_boxes_list_schedules_request(
                     project_name=project_name,
                     pool_name=pool_name,
                     filter=filter,
@@ -615,11 +619,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -631,17 +635,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -651,11 +655,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -714,7 +718,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_get_schedule_request(
+        _request = build_dev_boxes_get_schedule_request(
             project_name=project_name,
             pool_name=pool_name,
             schedule_name=schedule_name,
@@ -723,13 +727,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -749,9 +755,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace
     def list_all_dev_boxes(
@@ -856,7 +862,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_list_all_dev_boxes_request(
+                _request = build_dev_boxes_list_all_dev_boxes_request(
                     filter=filter,
                     top=top,
                     api_version=self._config.api_version,
@@ -864,11 +870,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -880,17 +886,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -900,11 +906,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -925,7 +931,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         """Lists Dev Boxes in the Dev Center for a particular user.
 
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :keyword filter: An OData filter clause to apply to the operation. Default value is None.
         :paramtype filter: str
@@ -1024,7 +1030,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_list_all_dev_boxes_by_user_request(
+                _request = build_dev_boxes_list_all_dev_boxes_by_user_request(
                     user_id=user_id,
                     filter=filter,
                     top=top,
@@ -1033,11 +1039,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -1049,17 +1055,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -1069,11 +1075,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -1096,7 +1102,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :keyword filter: An OData filter clause to apply to the operation. Default value is None.
         :paramtype filter: str
@@ -1195,7 +1201,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_list_dev_boxes_request(
+                _request = build_dev_boxes_list_dev_boxes_request(
                     project_name=project_name,
                     user_id=user_id,
                     filter=filter,
@@ -1205,11 +1211,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -1221,17 +1227,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -1241,11 +1247,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -1266,7 +1272,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -1361,7 +1367,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_get_dev_box_request(
+        _request = build_dev_boxes_get_dev_box_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -1370,13 +1376,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1396,9 +1404,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     async def _create_dev_box_initial(
         self, project_name: str, user_id: str, dev_box_name: str, body: Union[JSON, JSON, IO], **kwargs: Any
@@ -1425,7 +1433,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         else:
             _json = body
 
-        request = build_dev_boxes_create_dev_box_request(
+        _request = build_dev_boxes_create_dev_box_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -1437,13 +1445,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -1493,7 +1503,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -1671,7 +1681,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -1780,7 +1790,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -1882,7 +1892,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2076,7 +2086,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -2113,7 +2125,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[Optional[JSON]] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_delete_dev_box_request(
+        _request = build_dev_boxes_delete_dev_box_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -2122,13 +2134,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -2153,9 +2167,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, deserialized, response_headers)
+            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
 
     @distributed_trace_async
     async def begin_delete_dev_box(
@@ -2166,7 +2180,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2240,7 +2254,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -2275,7 +2291,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_start_dev_box_request(
+        _request = build_dev_boxes_start_dev_box_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -2284,13 +2300,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -2310,9 +2328,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), response_headers)
+            return cls(pipeline_response, cast(JSON, deserialized), response_headers)  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace_async
     async def begin_start_dev_box(
@@ -2323,7 +2341,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2396,7 +2414,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -2433,7 +2453,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_stop_dev_box_request(
+        _request = build_dev_boxes_stop_dev_box_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -2443,13 +2463,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -2469,9 +2491,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), response_headers)
+            return cls(pipeline_response, cast(JSON, deserialized), response_headers)  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace_async
     async def begin_stop_dev_box(
@@ -2482,7 +2504,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2558,7 +2580,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -2593,7 +2617,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_restart_dev_box_request(
+        _request = build_dev_boxes_restart_dev_box_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -2602,13 +2626,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -2628,9 +2654,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), response_headers)
+            return cls(pipeline_response, cast(JSON, deserialized), response_headers)  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace_async
     async def begin_restart_dev_box(
@@ -2641,7 +2667,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2714,7 +2740,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -2742,7 +2770,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2775,7 +2803,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_get_remote_connection_request(
+        _request = build_dev_boxes_get_remote_connection_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -2784,13 +2812,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -2810,18 +2840,20 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace
-    def list_actions(self, project_name: str, user_id: str, dev_box_name: str, **kwargs: Any) -> AsyncIterable[JSON]:
+    def list_dev_box_actions(
+        self, project_name: str, user_id: str, dev_box_name: str, **kwargs: Any
+    ) -> AsyncIterable[JSON]:
         """Lists actions on a Dev Box.
 
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2862,7 +2894,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_list_actions_request(
+                _request = build_dev_boxes_list_dev_box_actions_request(
                     project_name=project_name,
                     user_id=user_id,
                     dev_box_name=dev_box_name,
@@ -2871,11 +2903,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -2887,17 +2919,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -2907,11 +2939,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -2926,7 +2958,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         return AsyncItemPaged(get_next, extract_data)
 
     @distributed_trace_async
-    async def get_action(
+    async def get_dev_box_action(
         self, project_name: str, user_id: str, dev_box_name: str, action_name: str, **kwargs: Any
     ) -> JSON:
         """Gets an action.
@@ -2934,7 +2966,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -2976,7 +3008,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_get_action_request(
+        _request = build_dev_boxes_get_dev_box_action_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -2986,13 +3018,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -3012,9 +3046,9 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace_async
     async def skip_action(  # pylint: disable=inconsistent-return-statements
@@ -3025,7 +3059,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
@@ -3050,7 +3084,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[None] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_skip_action_request(
+        _request = build_dev_boxes_skip_action_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
@@ -3060,13 +3094,15 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -3078,7 +3114,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             raise HttpResponseError(response=response)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {})  # type: ignore
 
     @distributed_trace_async
     async def delay_action(
@@ -3088,7 +3124,7 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         dev_box_name: str,
         action_name: str,
         *,
-        until: datetime.datetime,
+        delay_until: datetime.datetime,
         **kwargs: Any
     ) -> JSON:
         """Delays the occurrence of an action.
@@ -3096,14 +3132,14 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
         :param action_name: The name of an action that will take place on a Dev Box. Required.
         :type action_name: str
-        :keyword until: The time to delay the Dev Box action or actions until. Required.
-        :paramtype until: ~datetime.datetime
+        :keyword delay_until: The time to delay the Dev Box action or actions until. Required.
+        :paramtype delay_until: ~datetime.datetime
         :keyword bool stream: Whether to stream the response of this operation. Defaults to False. You
          will have to context manage the returned stream.
         :return: JSON object
@@ -3140,24 +3176,26 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_dev_boxes_delay_action_request(
+        _request = build_dev_boxes_delay_action_request(
             project_name=project_name,
             user_id=user_id,
             dev_box_name=dev_box_name,
             action_name=action_name,
-            until=until,
+            delay_until=delay_until,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -3177,25 +3215,25 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace
     def delay_all_actions(
-        self, project_name: str, user_id: str, dev_box_name: str, *, until: datetime.datetime, **kwargs: Any
+        self, project_name: str, user_id: str, dev_box_name: str, *, delay_until: datetime.datetime, **kwargs: Any
     ) -> AsyncIterable[JSON]:
         """Delays all actions.
 
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param dev_box_name: The name of a Dev Box. Required.
         :type dev_box_name: str
-        :keyword until: The time to delay the Dev Box action or actions until. Required.
-        :paramtype until: ~datetime.datetime
+        :keyword delay_until: The time to delay the Dev Box action or actions until. Required.
+        :paramtype delay_until: ~datetime.datetime
         :return: An iterator like instance of JSON object
         :rtype: ~azure.core.async_paging.AsyncItemPaged[JSON]
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -3254,21 +3292,21 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_dev_boxes_delay_all_actions_request(
+                _request = build_dev_boxes_delay_all_actions_request(
                     project_name=project_name,
                     user_id=user_id,
                     dev_box_name=dev_box_name,
-                    until=until,
+                    delay_until=delay_until,
                     api_version=self._config.api_version,
                     headers=_headers,
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -3280,17 +3318,17 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -3300,11 +3338,11 @@ class DevBoxesOperations:  # pylint: disable=too-many-public-methods
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -3399,7 +3437,7 @@ class DeploymentEnvironmentsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_deployment_environments_list_all_environments_request(
+                _request = build_deployment_environments_list_all_environments_request(
                     project_name=project_name,
                     top=top,
                     api_version=self._config.api_version,
@@ -3407,11 +3445,11 @@ class DeploymentEnvironmentsOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -3423,17 +3461,17 @@ class DeploymentEnvironmentsOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -3443,11 +3481,11 @@ class DeploymentEnvironmentsOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -3468,7 +3506,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :keyword top: The maximum number of resources to return from the operation. Example: 'top=10'.
          Required.
@@ -3527,7 +3565,7 @@ class DeploymentEnvironmentsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_deployment_environments_list_environments_request(
+                _request = build_deployment_environments_list_environments_request(
                     project_name=project_name,
                     user_id=user_id,
                     top=top,
@@ -3536,11 +3574,11 @@ class DeploymentEnvironmentsOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -3552,17 +3590,17 @@ class DeploymentEnvironmentsOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -3572,11 +3610,11 @@ class DeploymentEnvironmentsOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -3597,7 +3635,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param environment_name: The name of the environment. Required.
         :type environment_name: str
@@ -3654,7 +3692,7 @@ class DeploymentEnvironmentsOperations:
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_deployment_environments_get_environment_request(
+        _request = build_deployment_environments_get_environment_request(
             project_name=project_name,
             user_id=user_id,
             environment_name=environment_name,
@@ -3663,13 +3701,15 @@ class DeploymentEnvironmentsOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -3689,9 +3729,9 @@ class DeploymentEnvironmentsOperations:
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     async def _create_or_update_environment_initial(
         self, project_name: str, user_id: str, environment_name: str, body: Union[JSON, JSON, IO], **kwargs: Any
@@ -3718,7 +3758,7 @@ class DeploymentEnvironmentsOperations:
         else:
             _json = body
 
-        request = build_deployment_environments_create_or_update_environment_request(
+        _request = build_deployment_environments_create_or_update_environment_request(
             project_name=project_name,
             user_id=user_id,
             environment_name=environment_name,
@@ -3730,13 +3770,15 @@ class DeploymentEnvironmentsOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -3756,9 +3798,9 @@ class DeploymentEnvironmentsOperations:
             deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), response_headers)
+            return cls(pipeline_response, cast(JSON, deserialized), response_headers)  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @overload
     async def begin_create_or_update_environment(
@@ -3776,7 +3818,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param environment_name: The name of the environment. Required.
         :type environment_name: str
@@ -3878,7 +3920,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param environment_name: The name of the environment. Required.
         :type environment_name: str
@@ -3949,7 +3991,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param environment_name: The name of the environment. Required.
         :type environment_name: str
@@ -4013,7 +4055,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param environment_name: The name of the environment. Required.
         :type environment_name: str
@@ -4136,7 +4178,9 @@ class DeploymentEnvironmentsOperations:
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -4173,7 +4217,7 @@ class DeploymentEnvironmentsOperations:
 
         cls: ClsType[Optional[JSON]] = kwargs.pop("cls", None)
 
-        request = build_deployment_environments_delete_environment_request(
+        _request = build_deployment_environments_delete_environment_request(
             project_name=project_name,
             user_id=user_id,
             environment_name=environment_name,
@@ -4182,13 +4226,15 @@ class DeploymentEnvironmentsOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -4213,9 +4259,9 @@ class DeploymentEnvironmentsOperations:
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, deserialized, response_headers)
+            return cls(pipeline_response, deserialized, response_headers)  # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
 
     @distributed_trace_async
     async def begin_delete_environment(
@@ -4226,7 +4272,7 @@ class DeploymentEnvironmentsOperations:
         :param project_name: The DevCenter Project upon which to execute operations. Required.
         :type project_name: str
         :param user_id: The AAD object id of the user. If value is 'me', the identity is taken from the
-         authentication context. The default value is "me". Required.
+         authentication context. Required.
         :type user_id: str
         :param environment_name: The name of the environment. Required.
         :type environment_name: str
@@ -4300,7 +4346,9 @@ class DeploymentEnvironmentsOperations:
             return deserialized
 
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
 
         if polling is True:
@@ -4358,7 +4406,7 @@ class DeploymentEnvironmentsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_deployment_environments_list_catalogs_request(
+                _request = build_deployment_environments_list_catalogs_request(
                     project_name=project_name,
                     top=top,
                     api_version=self._config.api_version,
@@ -4366,11 +4414,11 @@ class DeploymentEnvironmentsOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -4382,17 +4430,17 @@ class DeploymentEnvironmentsOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -4402,11 +4450,11 @@ class DeploymentEnvironmentsOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -4455,7 +4503,7 @@ class DeploymentEnvironmentsOperations:
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_deployment_environments_get_catalog_request(
+        _request = build_deployment_environments_get_catalog_request(
             project_name=project_name,
             catalog_name=catalog_name,
             api_version=self._config.api_version,
@@ -4463,13 +4511,15 @@ class DeploymentEnvironmentsOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -4489,9 +4539,9 @@ class DeploymentEnvironmentsOperations:
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace
     def list_environment_definitions(self, project_name: str, *, top: int, **kwargs: Any) -> AsyncIterable[JSON]:
@@ -4559,7 +4609,7 @@ class DeploymentEnvironmentsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_deployment_environments_list_environment_definitions_request(
+                _request = build_deployment_environments_list_environment_definitions_request(
                     project_name=project_name,
                     top=top,
                     api_version=self._config.api_version,
@@ -4567,11 +4617,11 @@ class DeploymentEnvironmentsOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -4583,17 +4633,17 @@ class DeploymentEnvironmentsOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -4603,11 +4653,11 @@ class DeploymentEnvironmentsOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -4691,7 +4741,7 @@ class DeploymentEnvironmentsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_deployment_environments_list_environment_definitions_by_catalog_request(
+                _request = build_deployment_environments_list_environment_definitions_by_catalog_request(
                     project_name=project_name,
                     catalog_name=catalog_name,
                     top=top,
@@ -4700,11 +4750,11 @@ class DeploymentEnvironmentsOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -4716,17 +4766,17 @@ class DeploymentEnvironmentsOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -4736,11 +4786,11 @@ class DeploymentEnvironmentsOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
@@ -4822,7 +4872,7 @@ class DeploymentEnvironmentsOperations:
 
         cls: ClsType[JSON] = kwargs.pop("cls", None)
 
-        request = build_deployment_environments_get_environment_definition_request(
+        _request = build_deployment_environments_get_environment_definition_request(
             project_name=project_name,
             catalog_name=catalog_name,
             definition_name=definition_name,
@@ -4831,13 +4881,15 @@ class DeploymentEnvironmentsOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "devCenterEndpoint": self._serialize.url(
+                "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
+            ),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = kwargs.pop("stream", False)
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request, stream=_stream, **kwargs
         )
 
         response = pipeline_response.http_response
@@ -4857,9 +4909,9 @@ class DeploymentEnvironmentsOperations:
                 deserialized = None
 
         if cls:
-            return cls(pipeline_response, cast(JSON, deserialized), {})
+            return cls(pipeline_response, cast(JSON, deserialized), {})  # type: ignore
 
-        return cast(JSON, deserialized)
+        return cast(JSON, deserialized)  # type: ignore
 
     @distributed_trace
     def list_environment_types(self, project_name: str, *, top: int, **kwargs: Any) -> AsyncIterable[JSON]:
@@ -4903,7 +4955,7 @@ class DeploymentEnvironmentsOperations:
         def prepare_request(next_link=None):
             if not next_link:
 
-                request = build_deployment_environments_list_environment_types_request(
+                _request = build_deployment_environments_list_environment_types_request(
                     project_name=project_name,
                     top=top,
                     api_version=self._config.api_version,
@@ -4911,11 +4963,11 @@ class DeploymentEnvironmentsOperations:
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
@@ -4927,17 +4979,17 @@ class DeploymentEnvironmentsOperations:
                     }
                 )
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
+                _request = HttpRequest(
                     "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
+                    "devCenterEndpoint": self._serialize.url(
+                        "self._config.dev_center_endpoint", self._config.dev_center_endpoint, "str", skip_quote=True
                     ),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = pipeline_response.http_response.json()
@@ -4947,11 +4999,11 @@ class DeploymentEnvironmentsOperations:
             return deserialized.get("nextLink") or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
             pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+                _request, stream=_stream, **kwargs
             )
             response = pipeline_response.http_response
 
