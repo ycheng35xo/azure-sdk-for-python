@@ -6,7 +6,7 @@
 # --------------------------------------------------------------------------
 
 from abc import ABC
-from typing import TYPE_CHECKING
+from typing import List, TYPE_CHECKING, cast
 
 from ._configuration import AzureCommunicationCallAutomationServiceConfiguration
 
@@ -17,7 +17,19 @@ if TYPE_CHECKING:
     from ._serialization import Deserializer, Serializer
 
 
-class AzureCommunicationCallAutomationServiceMixinABC(ABC):  # pylint: disable=name-too-long
+def _format_url_section(template, **kwargs):
+    components = template.split("/")
+    while components:
+        try:
+            return template.format(**kwargs)
+        except KeyError as key:
+            # Need the cast, as for some reasons "split" is typed as list[str | Any]
+            formatted_components = cast(List[str], template.split("/"))
+            components = [c for c in formatted_components if "{}".format(key.args[0]) not in c]
+            template = "/".join(components)
+
+
+class AzureCommunicationCallAutomationServiceMixinABC(ABC):
     """DO NOT use this class. It is for internal typing use only."""
 
     _client: "PipelineClient"

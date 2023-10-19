@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from .._serialization import Deserializer, Serializer
 
 
-class AzureCommunicationCallAutomationServiceMixinABC(ABC):  # pylint: disable=name-too-long
+class AzureCommunicationCallAutomationServiceMixinABC(ABC):
     """DO NOT use this class. It is for internal typing use only."""
 
     _client: "AsyncPipelineClient"

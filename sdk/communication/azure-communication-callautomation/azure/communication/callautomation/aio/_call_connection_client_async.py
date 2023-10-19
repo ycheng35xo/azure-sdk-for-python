@@ -3,7 +3,7 @@
 # Licensed under the MIT License. See License.txt in the project root for
 # license information.
 # --------------------------------------------------------------------------
-from typing import TYPE_CHECKING, Optional, List, Union, Dict
+from typing import TYPE_CHECKING, Optional, List, Union
 from urllib.parse import urlparse
 import warnings
 
@@ -16,9 +16,10 @@ from azure.core.tracing.decorator_async import distributed_trace_async
 from .._version import SDK_MONIKER
 from .._api_versions import DEFAULT_VERSION
 from .._utils import (
+    get_repeatability_guid,
+    process_repeatability_first_sent,
     serialize_phone_identifier,
-    serialize_identifier,
-    process_repeatability_first_sent
+    serialize_identifier
 )
 from .._models import (
     CallParticipant,
@@ -26,9 +27,9 @@ from .._models import (
     AddParticipantResult,
     RemoveParticipantResult,
     TransferCallResult,
-    MuteParticipantsResult,
-    CallInvite,
-    CancelAddParticipantResult
+    MuteParticipantResult,
+    SendDtmfTonesResult,
+    CallInvite
 )
 from .._generated.aio import AzureCommunicationCallAutomationService
 from .._generated.models import (
@@ -38,20 +39,18 @@ from .._generated.models import (
     PlayRequest,
     RecognizeRequest,
     ContinuousDtmfRecognitionRequest,
-    SendDtmfRequest,
-    CustomContext,
+    SendDtmfTonesRequest,
     DtmfOptions,
     SpeechOptions,
     PlayOptions,
     RecognizeOptions,
-    MuteParticipantsRequest,
-    CancelAddParticipantRequest,
-    StopHoldMusicRequest,
-    StartHoldMusicRequest,
+    MuteParticipantsRequest
 )
 from .._generated.models._enums import RecognizeInputType
-from .._shared.auth_policy_utils import get_authentication_policy
-from .._shared.utils import parse_connection_str
+from .._shared.utils import (
+    get_authentication_policy,
+    parse_connection_str
+)
 if TYPE_CHECKING:
     from ._call_automation_client_async import CallAutomationClient
     from .._generated.models._enums import DtmfTone
@@ -63,7 +62,7 @@ if TYPE_CHECKING:
         FileSource,
         TextSource,
         SsmlSource,
-        Choice
+        RecognitionChoice
     )
     from azure.core.credentials_async import (
         AsyncTokenCredential
@@ -106,7 +105,7 @@ class CallConnectionClient:
                 if not endpoint.lower().startswith('http'):
                     endpoint = "https://" + endpoint
             except AttributeError:
-                raise ValueError("Host URL must be a string") # pylint: disable=raise-missing-from
+                raise ValueError("Host URL must be a string")
             parsed_url = urlparse(endpoint.rstrip('/'))
             if not parsed_url.netloc:
                 raise ValueError(f"Invalid URL: {format(endpoint)}")
@@ -189,6 +188,7 @@ class CallConnectionClient:
             process_repeatability_first_sent(kwargs)
             await self._call_connection_client.terminate_call(
                 self._call_connection_id,
+                repeatability_request_id=get_repeatability_guid(),
                 **kwargs
             )
         else:
@@ -236,47 +236,29 @@ class CallConnectionClient:
         self,
         target_participant: 'CommunicationIdentifier',
         *,
-        sip_headers: Optional[Dict[str, str]] = None,
-        voip_headers: Optional[Dict[str, str]] = None,
         operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
-        transferee: Optional['CommunicationIdentifier'] = None,
         **kwargs
     ) -> TransferCallResult:
         """Transfer the call to a participant.
 
         :param target_participant: The transfer target.
         :type target_participant: CommunicationIdentifier
-        :keyword sip_headers: Custom context for PSTN
-        :paramtype sip_headers: dict[str, str]
-        :keyword voip_headers: Custom context for VOIP
-        :paramtype voip_headers: dict[str, str]
         :keyword operation_context: Value that can be used to track the call and its associated events.
-        :paramtype operation_context: str or None
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str or None
-        :keyword transferee: Url that overrides original callback URI for this request.
-        :paramtype transferee: ~azure.communication.callautomation.CommunicationIdentifier or None
+        :paramtype operation_context: str
         :return: TransferCallResult
         :rtype: ~azure.communication.callautomation.TransferCallResult
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        user_custom_context = CustomContext(
-            voip_headers=voip_headers,
-            sip_headers=sip_headers
-            ) if sip_headers or voip_headers else None
         request = TransferToParticipantRequest(
             target_participant=serialize_identifier(target_participant),
-            custom_context=user_custom_context,
-            operation_context=operation_context,
-            callback_uri=callback_url
+            operation_context=operation_context
         )
+
         process_repeatability_first_sent(kwargs)
-        if transferee:
-            request.transferee = serialize_identifier(transferee)
         result = await self._call_connection_client.transfer_to_participant(
             self._call_connection_id,
             request,
+            repeatability_request_id=get_repeatability_guid(),
             **kwargs
         )
         return TransferCallResult._from_generated(result)  # pylint:disable=protected-access
@@ -288,11 +270,8 @@ class CallConnectionClient:
         *,
         invitation_timeout: Optional[int] = None,
         operation_context: Optional[str] = None,
-        sip_headers: Optional[Dict[str, str]] = None,
-        voip_headers: Optional[Dict[str, str]] = None,
         source_caller_id_number: Optional['PhoneNumberIdentifier'] = None,
         source_display_name: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
     ) -> AddParticipantResult:
         """Add a participant to the call.
@@ -304,49 +283,35 @@ class CallConnectionClient:
         :paramtype invitation_timeout: int or None
         :keyword operation_context: Value that can be used to track the call and its associated events.
         :paramtype operation_context: str or None
-        :keyword sip_headers: Sip Headers for PSTN Call
-        :paramtype sip_headers: Dict[str, str] or None
-        :keyword voip_headers: Voip Headers for Voip Call
-        :paramtype voip_headers: Dict[str, str] or None
         :keyword source_caller_id_number: The source caller Id, a phone number,
          that's shown to the PSTN participant being invited.
          Required only when calling a PSTN callee.
         :paramtype source_caller_id_number: ~azure.communication.callautomation.PhoneNumberIdentifier or None
         :keyword source_display_name: Display name of the caller.
         :paramtype source_display_name: str or None
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str or None
         :return: AddParticipantResult
         :rtype: ~azure.communication.callautomation.AddParticipantResult
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         # Backwards compatibility with old API signature
         if isinstance(target_participant, CallInvite):
-            sip_headers = sip_headers or target_participant.sip_headers
-            voip_headers = voip_headers or target_participant.voip_headers
             source_caller_id_number = source_caller_id_number or target_participant.source_caller_id_number
             source_display_name = source_display_name or target_participant.source_display_name
             target_participant = target_participant.target
 
-        user_custom_context = None
-        if sip_headers or voip_headers:
-            user_custom_context = CustomContext(
-                voip_headers=voip_headers,
-                sip_headers=sip_headers
-            )
         add_participant_request = AddParticipantRequest(
             participant_to_add=serialize_identifier(target_participant),
             source_caller_id_number=serialize_phone_identifier(source_caller_id_number),
             source_display_name=source_display_name,
-            custom_context=user_custom_context,
             invitation_timeout_in_seconds=invitation_timeout,
-            operation_context=operation_context,
-            callback_uri=callback_url
+            operation_context=operation_context
         )
+
         process_repeatability_first_sent(kwargs)
         response = await self._call_connection_client.add_participant(
             self._call_connection_id,
             add_participant_request,
+            repeatability_request_id=get_repeatability_guid(),
             **kwargs
         )
         return AddParticipantResult._from_generated(response)  # pylint:disable=protected-access
@@ -357,7 +322,6 @@ class CallConnectionClient:
         target_participant: 'CommunicationIdentifier',
         *,
         operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
     ) -> RemoveParticipantResult:
         """Remove a participant from the call.
@@ -366,21 +330,20 @@ class CallConnectionClient:
         :type target_participant: ~azure.communication.callautomation.CommunicationIdentifier
         :keyword operation_context: Value that can be used to track the call and its associated events.
         :paramtype operation_context: str
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
         :return: RemoveParticipantResult
         :rtype: ~azure.communication.callautomation.RemoveParticipantResult
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         remove_participant_request = RemoveParticipantRequest(
             participant_to_remove=serialize_identifier(target_participant),
-            operation_context=operation_context,
-            callback_uri=callback_url
+            operation_context=operation_context
         )
+
         process_repeatability_first_sent(kwargs)
         response = await self._call_connection_client.remove_participant(
             self._call_connection_id,
             remove_participant_request,
+            repeatability_request_id=get_repeatability_guid(),
             **kwargs
         )
         return RemoveParticipantResult._from_generated(response)  # pylint:disable=protected-access
@@ -393,7 +356,6 @@ class CallConnectionClient:
         *,
         loop: bool = False,
         operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
     ) -> None:
         """Play media to specific participant(s) in the call.
@@ -412,8 +374,6 @@ class CallConnectionClient:
         :paramtype loop: bool
         :keyword operation_context: Value that can be used to track this call and its associated events.
         :paramtype operation_context: str or None
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
         :return: None
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -427,11 +387,10 @@ class CallConnectionClient:
 
         audience = [] if play_to == "all" else [serialize_identifier(i) for i in play_to]
         play_request = PlayRequest(
-            play_source_info=play_source_single._to_generated(),  # pylint:disable=protected-access
+            play_sources=[play_source_single._to_generated()],  # pylint:disable=protected-access
             play_to=audience,
             play_options=PlayOptions(loop=loop),
             operation_context=operation_context,
-            callback_uri=callback_url,
             **kwargs
         )
         await self._call_media_client.play(self._call_connection_id, play_request)
@@ -443,7 +402,6 @@ class CallConnectionClient:
         *,
         loop: bool = False,
         operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
     ) -> None:
         """Play media to all participants in the call.
@@ -455,8 +413,6 @@ class CallConnectionClient:
         :paramtype loop: bool
         :keyword operation_context: Value that can be used to track this call and its associated events.
         :paramtype operation_context: str or None
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
         :return: None
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -469,7 +425,6 @@ class CallConnectionClient:
             play_source=play_source,
             loop=loop,
             operation_context=operation_context,
-            callback_url=callback_url,
             **kwargs
         )
 
@@ -485,12 +440,12 @@ class CallConnectionClient:
         operation_context: Optional[str] = None,
         interrupt_prompt: bool = False,
         dtmf_inter_tone_timeout: Optional[int] = None,
-        dtmf_max_tones_to_collect: Optional[str] = None,
+        dtmf_max_tones_to_collect: Optional[int] = None,
         dtmf_stop_tones: Optional[List[str or 'DtmfTone']] = None,
-        choices: Optional[List["Choice"]] = None,
-        end_silence_timeout_in_ms: Optional[int] = None,
+        speech_language: Optional[str] = None,
+        choices: Optional[List['RecognitionChoice']] = None,
+        end_silence_timeout: Optional[int] = None,
         speech_recognition_model_endpoint_id: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
     ) -> None:
         """Recognize tones from specific participant in the call.
@@ -521,11 +476,15 @@ class CallConnectionClient:
         :paramtype dtmf_max_tones_to_collect: int
         :keyword dtmf_stop_tones: List of tones that will stop recognizing.
         :paramtype dtmf_stop_tones: list[str or ~azure.communication.callautomation.DtmfTone]
-        :keyword speech_recognition_model_endpoint_id:
-        Endpoint id where the custom speech recognition model was deployed.
-        :paramtype speech_recognition_model_endpoint_id:
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
+        :keyword speech_language: Speech language to be recognized, If not set default is en-US.
+        :paramtype speech_language: str
+        :keyword choices: Defines Ivr choices for recognize.
+        :paramtype choices: list[~azure.communication.callautomation.RecognitionChoice]
+        :keyword end_silence_timeout: The length of end silence when user stops speaking and cogservice
+         send response.
+        :paramtype end_silence_timeout: int
+        :keyword speech_recognition_model_endpoint_id: Endpoint where the custom model was deployed.
+        :paramtype speech_recognition_model_endpoint_id: str
         :return: None
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
@@ -534,6 +493,7 @@ class CallConnectionClient:
             interrupt_prompt=interrupt_prompt,
             initial_silence_timeout_in_seconds=initial_silence_timeout,
             target_participant=serialize_identifier(target_participant),
+            speech_language=speech_language,
             speech_recognition_model_endpoint_id=speech_recognition_model_endpoint_id
         )
         play_source_single: Optional[MediaSources] = None
@@ -544,26 +504,28 @@ class CallConnectionClient:
             play_source_single = play_prompt
 
         if input_type == RecognizeInputType.DTMF:
-            dtmf_options=DtmfOptions(
+            dtmf_options = DtmfOptions(
                 inter_tone_timeout_in_seconds=dtmf_inter_tone_timeout,
                 max_tones_to_collect=dtmf_max_tones_to_collect,
                 stop_tones=dtmf_stop_tones
             )
             options.dtmf_options = dtmf_options
         elif input_type == RecognizeInputType.SPEECH:
-            speech_options = SpeechOptions(end_silence_timeout_in_ms=end_silence_timeout_in_ms)
+            speech_options = SpeechOptions(
+                end_silence_timeout_in_ms=end_silence_timeout * 1000 if end_silence_timeout is not None else None)
             options.speech_options = speech_options
         elif input_type == RecognizeInputType.SPEECH_OR_DTMF:
-            dtmf_options=DtmfOptions(
+            dtmf_options = DtmfOptions(
                 inter_tone_timeout_in_seconds=dtmf_inter_tone_timeout,
                 max_tones_to_collect=dtmf_max_tones_to_collect,
                 stop_tones=dtmf_stop_tones
             )
-            speech_options = SpeechOptions(end_silence_timeout_in_ms=end_silence_timeout_in_ms)
+            speech_options = SpeechOptions(
+                end_silence_timeout_in_ms=end_silence_timeout * 1000 if end_silence_timeout is not None else None)
             options.dtmf_options = dtmf_options
             options.speech_options = speech_options
         elif input_type == RecognizeInputType.CHOICES:
-            options.choices = choices
+            options.choices = [choice._to_generated() for choice in choices] #pylint:disable=protected-access
         else:
             raise ValueError(f"Input type '{input_type}' is not supported.")
 
@@ -573,7 +535,6 @@ class CallConnectionClient:
             interrupt_call_media_operation=interrupt_call_media_operation,
             operation_context=operation_context,
             recognize_options=options,
-            callback_uri=callback_url,
             **kwargs
         )
         await self._call_media_client.recognize(
@@ -625,7 +586,6 @@ class CallConnectionClient:
         target_participant: 'CommunicationIdentifier',
         *,
         operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
     ) -> None:
         """Stop continuous Dtmf recognition by unsubscribing to tones.
@@ -634,16 +594,13 @@ class CallConnectionClient:
         :type target_participant: ~azure.communication.callautomation.CommunicationIdentifier
         :keyword operation_context: Value that can be used to track the call and its associated events.
         :paramtype operation_context: str
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
         :return: None
         :rtype: None
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         continuous_dtmf_recognition_request = ContinuousDtmfRecognitionRequest(
             target_participant=serialize_identifier(target_participant),
-            operation_context=operation_context,
-            callback_uri=callback_url
+            operation_context=operation_context
         )
         await self._call_media_client.stop_continuous_dtmf_recognition(
             self._call_connection_id,
@@ -652,15 +609,14 @@ class CallConnectionClient:
         )
 
     @distributed_trace_async
-    async def send_dtmf(
+    async def send_dtmf_tones(
         self,
         tones: List[Union[str, 'DtmfTone']],
         target_participant: 'CommunicationIdentifier',
         *,
         operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
         **kwargs
-    ) -> None:
+    ) -> SendDtmfTonesResult:
         """Send Dtmf tones to the call.
 
         :param tones: List of tones to be sent to target participant.
@@ -669,41 +625,42 @@ class CallConnectionClient:
         :type target_participant: ~azure.communication.callautomation.CommunicationIdentifier
         :keyword operation_context: Value that can be used to track the call and its associated events.
         :paramtype operation_context: str
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
-        :return: None
-        :rtype: None
+        :return: SendDtmfTonesResult
+        :rtype: ~azure.communication.callautomation.SendDtmfTonesResult
         :raises ~azure.core.exceptions.HttpResponseError:
         """
-        send_dtmf_request = SendDtmfRequest(
+        send_dtmf_tones_request = SendDtmfTonesRequest(
             tones=tones,
             target_participant=serialize_identifier(target_participant),
-            operation_context=operation_context,
-            callback_uri=callback_url
+            operation_context=operation_context
         )
-        await self._call_media_client.send_dtmf(
+        process_repeatability_first_sent(kwargs)
+        response = await self._call_media_client.send_dtmf_tones(
             self._call_connection_id,
-            send_dtmf_request,
+            send_dtmf_tones_request,
+            repeatability_request_id=get_repeatability_guid(),
             **kwargs
         )
 
+        return SendDtmfTonesResult._from_generated(response)  # pylint:disable=protected-access
+
     @distributed_trace_async
-    async def mute_participants(
+    async def mute_participant(
         self,
         target_participant: 'CommunicationIdentifier',
         *,
         operation_context: Optional[str] = None,
         **kwargs
-    ) -> MuteParticipantsResult:
-        """Mute participants from the call using identifier.
+    ) -> MuteParticipantResult:
+        """Mute participant from the call using identifier.
 
         :param target_participant: Participant to be muted from the call. Only ACS Users are supported. Required.
         :type target_participant: ~azure.communication.callautomation.CommunicationIdentifier
         :keyword operation_context: Used by customers when calling mid-call actions to correlate the request to the
          response event.
         :paramtype operation_context: str
-        :return: MuteParticipantsResult
-        :rtype: ~azure.communication.callautomation.MuteParticipantsResult
+        :return: MuteParticipantResult
+        :rtype: ~azure.communication.callautomation.MuteParticipantResult
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         mute_participants_request = MuteParticipantsRequest(
@@ -714,110 +671,10 @@ class CallConnectionClient:
         response =  await self._call_connection_client.mute(
             self._call_connection_id,
             mute_participants_request,
+            repeatability_request_id=get_repeatability_guid(),
             **kwargs
         )
-        return MuteParticipantsResult._from_generated(response)  # pylint:disable=protected-access
-
-    @distributed_trace_async
-    async def cancel_add_participant(
-        self,
-        invitation_id: str,
-        *,
-        operation_context: Optional[str] = None,
-        callback_url: Optional[str] = None,
-        **kwargs
-    ) -> CancelAddParticipantResult:
-        """Cancel add participant request.
-
-        :param  invitation_id: The invitation ID used to add participant.
-        :type invitation_id: str
-        :keyword operation_context: Value that can be used to track the call and its associated events.
-        :paramtype operation_context: str
-        :keyword callback_url: Url that overrides original callback URI for this request.
-        :paramtype callback_url: str
-        :return: CancelAddParticipantResult
-        :rtype: ~azure.communication.callautomation.CancelAddParticipantResult
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-        cancel_add_participant_request = CancelAddParticipantRequest(
-            invitation_id=invitation_id,
-            operation_context=operation_context,
-            callback_uri=callback_url
-        )
-        process_repeatability_first_sent(kwargs)
-        response = await self._call_connection_client.cancel_add_participant(
-            self._call_connection_id,
-            cancel_add_participant_request,
-            **kwargs
-        )
-        return CancelAddParticipantResult._from_generated(response)  # pylint:disable=protected-access
-
-    @distributed_trace_async
-    async def start_hold_music(
-        self,
-        target_participant: 'CommunicationIdentifier',
-        play_source: MediaSources,
-        *,
-        loop: bool = True,
-        operation_context: Optional[str] = None,
-        **kwargs
-    ) -> None:
-        """Hold participant from call while playing music.
-
-        :param play_source: A PlaySource representing the source to play.
-        :type play_source: ~azure.communication.callautomation.FileSource or
-         ~azure.communication.callautomation.TextSource or
-         ~azure.communication.callautomation.SsmlSource or
-         list[~azure.communication.callautomation.FileSource or
-          ~azure.communication.callautomation.TextSource or
-          ~azure.communication.callautomation.SsmlSource]
-        :param target_participant: The targets to play media to. Default value is 'all', to play media
-         to all participants in the call.
-        :type target_participant: list[~azure.communication.callautomation.CommunicationIdentifier]
-        :keyword loop: Whether the media should be repeated until stopped.
-        :paramtype loop: bool
-        :keyword operation_context: Value that can be used to track this call and its associated events.
-        :paramtype operation_context: str or None
-        :return: None
-        :rtype: None
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-        hold_request = StartHoldMusicRequest(
-            play_source_info=play_source._to_generated(),  # pylint:disable=protected-access
-            target_participant=serialize_identifier(target_participant),
-            operation_context=operation_context,
-            loop=loop,
-            **kwargs
-        )
-        self._call_media_client.start_hold_music(self._call_connection_id, hold_request)
-
-    @distributed_trace_async
-    async def stop_hold_music(
-        self,
-        target_participant: 'CommunicationIdentifier',
-        *,
-        operation_context: Optional[str] = None,
-        **kwargs
-    ) -> None:
-        """Remove hold from participant.
-
-        :param target_participant: The targets to play media to. Default value is 'all', to play media
-         to all participants in the call.
-        :type target_participant: list[~azure.communication.callautomation.CommunicationIdentifier]
-        :keyword operation_context: Value that can be used to track this call and its associated events.
-        :paramtype operation_context: str or None
-        :return: None
-        :rtype: None
-        :raises ~azure.core.exceptions.HttpResponseError:
-        """
-
-        stop_hold_request = StopHoldMusicRequest(
-            target_participant=serialize_identifier(target_participant),
-            operation_context=operation_context,
-            **kwargs
-        )
-        self._call_media_client.stop_hold_music(self._call_connection_id, stop_hold_request)
+        return MuteParticipantResult._from_generated(response) # pylint:disable=protected-access
 
     async def __aenter__(self) -> "CallConnectionClient":
         await self._client.__aenter__()

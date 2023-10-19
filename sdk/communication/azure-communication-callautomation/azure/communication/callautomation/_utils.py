@@ -4,8 +4,8 @@
 # license information.
 # --------------------------------------------------------------------------
 from typing import TYPE_CHECKING, Dict, Any, List, Optional, Union
+import uuid
 from datetime import datetime
-
 from ._shared.models import (
     CommunicationIdentifier,
     CommunicationUserIdentifier,
@@ -74,13 +74,16 @@ def build_call_locator(
         raise ValueError("Call locator required. Please provide either 'group_call_id' or 'server_call_id'.")
     return request
 
-
 def process_repeatability_first_sent(keywords: Dict[str, Any]) -> None:
     if 'headers' in keywords:
         if 'Repeatability-First-Sent' not in keywords['headers']:
             keywords['headers']['Repeatability-First-Sent'] = get_repeatability_timestamp()
     else:
         keywords['headers'] = {'Repeatability-First-Sent': get_repeatability_timestamp()}
+
+
+def get_repeatability_guid():
+    return uuid.uuid4()
 
 
 def get_repeatability_timestamp() -> str:
@@ -93,7 +96,6 @@ def serialize_identifier(identifier:CommunicationIdentifier) -> Dict[str, Any]:
     :param identifier: Identifier object
     :type identifier: CommunicationIdentifier
     :return: CommunicationIdentifierModel
-    :rtype: dict[str, any]
     """
     try:
         request_model = {'raw_id': identifier.raw_id}
@@ -110,7 +112,6 @@ def serialize_phone_identifier(identifier: Optional[PhoneNumberIdentifier]) -> O
     :param identifier: PhoneNumberIdentifier
     :type identifier: PhoneNumberIdentifier
     :return: PhoneNumberIdentifierModel
-    :rtype: ~azure.communication.callautomation._generated.models.PhoneNumberIdentifierModel
     """
     if identifier is None:
         return None
@@ -131,7 +132,6 @@ def serialize_communication_user_identifier(
     :param identifier: CommunicationUserIdentifier
     :type identifier: CommunicationUserIdentifier
     :return: CommunicationUserIdentifierModel
-    :rtype: ~azure.communication.callautomation._generated.models.CommunicationUserIdentifierModel
     """
     if identifier is None:
         return None
@@ -145,15 +145,14 @@ def serialize_communication_user_identifier(
 
 
 def deserialize_identifier(
-    identifier_model:CommunicationIdentifierModel
-)->CommunicationIdentifier:
+    identifier_model: CommunicationIdentifierModel
+) -> CommunicationIdentifier:
     """
     Deserialize the CommunicationIdentifierModel into Communication Identifier
 
     :param identifier_model: CommunicationIdentifierModel
     :type identifier_model: CommunicationIdentifierModel
     :return: CommunicationIdentifier
-    :rtype: ~azure.communication.callautomation.CommunicationIdentifier
     """
     raw_id = identifier_model.raw_id
 
@@ -180,7 +179,6 @@ def deserialize_phone_identifier(
     :param identifier_model: PhoneNumberIdentifierModel
     :type identifier_model: PhoneNumberIdentifierModel
     :return: PhoneNumberIdentifier
-    :rtype: ~azure.communication.callautomation.PhoneNumberIdentifier
     """
     if identifier_model:
         return PhoneNumberIdentifier(identifier_model.value)
@@ -196,6 +194,5 @@ def deserialize_comm_user_identifier(
     :param identifier_model: CommunicationUserIdentifierModel
     :type identifier_model: CommunicationUserIdentifierModel
     :return: CommunicationUserIdentifier
-    :rtype: ~azure.communication.callautomation.CommunicationUserIdentifier
     """
     return CommunicationUserIdentifierModel(id=identifier_model.id) if identifier_model else None
