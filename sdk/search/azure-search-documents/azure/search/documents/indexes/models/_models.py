@@ -29,7 +29,7 @@ from .._generated.models import (
 DELIMITER = "|"
 
 
-class SearchIndexerSkillset(_SearchIndexerSkillset):
+class SearchIndexerSkillset(_serialization.Model):
     """A list of skills.
 
     All required parameters must be populated in order to send to Azure.
@@ -152,9 +152,6 @@ class EntityRecognitionSkill(SearchIndexerSkill):
      It will default to the latest available when not specified. We recommend you do not specify
      this value unless absolutely necessary. Only valid from skill version 3.
     :vartype model_version: str
-    :ivar skill_version: The version of the skill to use when calling the Text Analytics service.
-     It will default to V1 when not specified.
-    :vartype skill_version: ~azure.search.documents.indexes.models.EntityRecognitionSkillVersion
     """
 
     _validation = {
@@ -176,7 +173,6 @@ class EntityRecognitionSkill(SearchIndexerSkill):
         "include_typeless_entities": {"key": "includeTypelessEntities", "type": "bool"},
         "minimum_precision": {"key": "minimumPrecision", "type": "float"},
         "model_version": {"key": "modelVersion", "type": "str"},
-        "skill_version": {"key": "skillVersion", "type": "str"},
     }
 
     def __init__(self, **kwargs):
@@ -261,17 +257,6 @@ class SentimentSkill(SearchIndexerSkill):
      "ru", "es", "sv", "tr".
     :vartype default_language_code: str or
      ~azure.search.documents.indexes.models.SentimentSkillLanguage
-    :ivar include_opinion_mining: If set to true, the skill output will include information from
-     Text Analytics for opinion mining, namely targets (nouns or verbs) and their associated
-     assessment (adjective) in the text. Default is false.
-    :vartype include_opinion_mining: bool
-    :ivar model_version: The version of the model to use when calling the Text Analytics service.
-     It will default to the latest available when not specified. We recommend you do not specify
-     this value unless absolutely necessary.
-    :vartype model_version: str
-    :ivar skill_version: The version of the skill to use when calling the Text Analytics service.
-     It will default to V1 when not specified.
-    :vartype skill_version: ~azure.search.documents.indexes.models.SentimentSkillVersion
     """
 
     _validation = {
@@ -288,9 +273,6 @@ class SentimentSkill(SearchIndexerSkill):
         "inputs": {"key": "inputs", "type": "[InputFieldMappingEntry]"},
         "outputs": {"key": "outputs", "type": "[OutputFieldMappingEntry]"},
         "default_language_code": {"key": "defaultLanguageCode", "type": "str"},
-        "include_opinion_mining": {"key": "includeOpinionMining", "type": "bool"},
-        "model_version": {"key": "modelVersion", "type": "str"},
-        "skill_version": {"key": "skillVersion", "type": "str"},
     }
 
     def __init__(self, **kwargs):
@@ -301,8 +283,6 @@ class SentimentSkill(SearchIndexerSkill):
         self.skill_version = skill_version
         self.odata_type = self.skill_version
         self.default_language_code = kwargs.get("default_language_code", None)
-        self.include_opinion_mining = kwargs.get("include_opinion_mining", None)
-        self.model_version = kwargs.get("model_version", None)
 
     def _to_generated(self):
         if self.skill_version in [
@@ -315,8 +295,6 @@ class SentimentSkill(SearchIndexerSkill):
                 name=self.name,
                 odata_type=self.odata_type,
                 default_language_code=self.default_language_code,
-                include_opinion_mining=self.include_opinion_mining,
-                model_version=self.model_version,
             )
         return None
 

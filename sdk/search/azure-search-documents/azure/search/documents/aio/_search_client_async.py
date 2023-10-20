@@ -155,21 +155,9 @@ class SearchClient(HeadersMixin):
         scoring_profile: Optional[str] = None,
         search_fields: Optional[List[str]] = None,
         search_mode: Optional[Union[str, SearchMode]] = None,
-        query_answer: Optional[Union[str, QueryAnswerType]] = None,
-        query_answer_count: Optional[int] = None,
-        query_answer_threshold: Optional[float] = None,
-        query_caption: Optional[Union[str, QueryCaptionType]] = None,
-        query_caption_highlight_enabled: Optional[bool] = None,
-        semantic_configuration_name: Optional[str] = None,
         select: Optional[List[str]] = None,
         skip: Optional[int] = None,
         top: Optional[int] = None,
-        scoring_statistics: Optional[Union[str, ScoringStatistics]] = None,
-        session_id: Optional[str] = None,
-        vector_queries: Optional[List[VectorQuery]] = None,
-        vector_filter_mode: Optional[Union[str, VectorFilterMode]] = None,
-        semantic_error_handling: Optional[Union[str, SemanticErrorHandling]] = None,
-        semantic_max_wait_in_milliseconds: Optional[int] = None,
         **kwargs
     ) -> AsyncSearchItemPaged[Dict]:
         # pylint:disable=too-many-locals, disable=redefined-builtin
@@ -216,25 +204,6 @@ class SearchClient(HeadersMixin):
         :keyword search_mode: A value that specifies whether any or all of the search terms must be
          matched in order to count the document as a match. Possible values include: 'any', 'all'.
         :paramtype search_mode: str or ~azure.search.documents.models.SearchMode
-        :keyword query_answer: This parameter is only valid if the query type is 'semantic'. If set,
-         the query returns answers extracted from key passages in the highest ranked documents.
-         Possible values include: "none", "extractive".
-        :paramtype query_answer: str or ~azure.search.documents.models.QueryAnswerType
-        :keyword int query_answer_count: This parameter is only valid if the query type is 'semantic' and
-         query answer is 'extractive'.
-         Configures the number of answers returned. Default count is 1.
-        :keyword float query_answer_threshold: This parameter is only valid if the query type is 'semantic' and
-         query answer is 'extractive'. Configures the number of confidence threshold. Default count is 0.7.
-        :keyword query_caption: This parameter is only valid if the query type is 'semantic'. If set, the
-         query returns captions extracted from key passages in the highest ranked documents.
-         Defaults to 'None'. Possible values include: "none", "extractive".
-        :paramtype query_caption: str or ~azure.search.documents.models.QueryCaptionType
-        :keyword bool query_caption_highlight_enabled: This parameter is only valid if the query type is 'semantic' when
-         query caption is set to 'extractive'. Determines whether highlighting is enabled.
-         Defaults to 'true'.
-        :keyword semantic_configuration_name: The name of the semantic configuration that will be used when
-         processing documents for queries of type semantic.
-        :paramtype semantic_configuration_name: str
         :keyword list[str] select: The list of fields to retrieve. If unspecified, all fields marked as retrievable
          in the schema are included.
         :keyword int skip: The number of search results to skip. This value cannot be greater than 100,000.
@@ -244,30 +213,6 @@ class SearchClient(HeadersMixin):
          $skip to implement client-side paging of search results. If results are truncated due to
          server-side paging, the response will include a continuation token that can be used to issue
          another Search request for the next page of results.
-        :keyword scoring_statistics: A value that specifies whether we want to calculate scoring
-         statistics (such as document frequency) globally for more consistent scoring, or locally, for
-         lower latency. The default is 'local'. Use 'global' to aggregate scoring statistics globally
-         before scoring. Using global scoring statistics can increase latency of search queries.
-         Possible values include: "local", "global".
-        :paramtype scoring_statistics: str or ~azure.search.documents.models.ScoringStatistics
-        :keyword str session_id: A value to be used to create a sticky session, which can help getting more
-         consistent results. As long as the same sessionId is used, a best-effort attempt will be made
-         to target the same replica set. Be wary that reusing the same sessionID values repeatedly can
-         interfere with the load balancing of the requests across replicas and adversely affect the
-         performance of the search service. The value used as sessionId cannot start with a '_'
-         character.
-        :keyword semantic_error_handling: Allows the user to choose whether a semantic call should fail
-         completely (default / current behavior), or to return partial results. Known values are:
-         "partial" and "fail".
-        :paramtype semantic_error_handling: str or ~azure.search.documents.models.SemanticErrorHandling
-        :keyword int semantic_max_wait_in_milliseconds: Allows the user to set an upper bound on the amount of
-         time it takes for semantic enrichment to finish processing before the request fails.
-        :keyword vector_queries: The query parameters for vector and hybrid search queries.
-        :paramtype vector_queries: list[VectorQuery]
-        :keyword vector_filter_mode: Determines whether or not filters are applied before or after the
-          vector search is performed. Default is 'preFilter'. Known values are: "postFilter" and "preFilter".
-        :paramtype vector_filter_mode: str or VectorFilterMode
-        :return: A list of documents (dicts) matching the specified search criteria.
         :rtype:  AsyncSearchItemPaged[dict]
 
         .. admonition:: Example:
@@ -300,14 +245,6 @@ class SearchClient(HeadersMixin):
         include_total_result_count = include_total_count
         filter_arg = filter
         search_fields_str = ",".join(search_fields) if search_fields else None
-        answers = query_answer if not query_answer_count else "{}|count-{}".format(query_answer, query_answer_count)
-        answers = answers if not query_answer_threshold else "{}|threshold-{}".format(answers, query_answer_threshold)
-        captions = (
-            query_caption
-            if not query_caption_highlight_enabled
-            else "{}|highlight-{}".format(query_caption, query_caption_highlight_enabled)
-        )
-        semantic_configuration = semantic_configuration_name
 
         query = SearchQuery(
             search_text=search_text,
@@ -324,18 +261,9 @@ class SearchClient(HeadersMixin):
             scoring_profile=scoring_profile,
             search_fields=search_fields_str,
             search_mode=search_mode,
-            answers=answers,
-            captions=captions,
-            semantic_configuration=semantic_configuration,
             select=select if isinstance(select, str) else None,
             skip=skip,
             top=top,
-            session_id=session_id,
-            scoring_statistics=scoring_statistics,
-            vector_queries=vector_queries,
-            vector_filter_mode=vector_filter_mode,
-            semantic_error_handling=semantic_error_handling,
-            semantic_max_wait_in_milliseconds=semantic_max_wait_in_milliseconds,
         )
         if isinstance(select, list):
             query.select(select)

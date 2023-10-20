@@ -20,9 +20,7 @@ from ._utils import (
 )
 from .models import (
     SearchIndexerSkillset,
-    EntityRecognitionSkillVersion,
     SearchIndexerDataSourceConnection,
-    SentimentSkillVersion,
 )
 from .._api_versions import DEFAULT_VERSION
 from .._headers_mixin import HeadersMixin
@@ -647,10 +645,7 @@ def _validate_skillset(skillset: SearchIndexerSkillset):
             skill_version = getattr(skill, "skill_version", None)
         if not skill_version:
             continue
-        if skill_version == SentimentSkillVersion.V3:
-            unsupported = []
-        elif skill_version == EntityRecognitionSkillVersion.V3:
-            unsupported = ["include_typeless_entities"]
+        unsupported = []
 
         errors = []
         for item in unsupported:

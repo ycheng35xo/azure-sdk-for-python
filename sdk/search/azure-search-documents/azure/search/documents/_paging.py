@@ -83,14 +83,6 @@ class SearchItemPaged(ItemPaged[ReturnType]):
         """
         return cast(int, self._first_iterator_instance().get_count())
 
-    def get_answers(self) -> Optional[List[AnswerResult]]:
-        """Return answers.
-
-        :return: answers
-        :rtype: list[~azure.search.documents.models.AnswerResult] or None
-        """
-        return cast(List[AnswerResult], self._first_iterator_instance().get_answers())
-
 
 # The pylint error silenced below seems spurious, as the inner wrapper does, in
 # fact, become a method of the class when it is applied.

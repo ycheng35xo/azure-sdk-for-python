@@ -67,14 +67,6 @@ class AsyncSearchItemPaged(AsyncItemPaged[ReturnType]):
         """
         return cast(int, await self._first_iterator_instance().get_count())
 
-    async def get_answers(self) -> Optional[List[AnswerResult]]:
-        """Return answers.
-
-        :return: Answers.
-        :rtype: list[~azure.search.documents.AnswerResult]
-        """
-        return cast(List[AnswerResult], await self._first_iterator_instance().get_answers())
-
 
 # The pylint error silenced below seems spurious, as the inner wrapper does, in
 # fact, become a method of the class when it is applied.

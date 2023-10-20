@@ -2815,21 +2815,16 @@ class GetIndexStatisticsResult(_serialization.Model):
     :vartype document_count: int
     :ivar storage_size: The amount of storage in bytes consumed by the index. Required.
     :vartype storage_size: int
-    :ivar vector_index_size: The amount of memory in bytes consumed by vectors in the index.
-     Required.
-    :vartype vector_index_size: int
     """
 
     _validation = {
         "document_count": {"required": True, "readonly": True},
         "storage_size": {"required": True, "readonly": True},
-        "vector_index_size": {"required": True, "readonly": True},
     }
 
     _attribute_map = {
         "document_count": {"key": "documentCount", "type": "int"},
         "storage_size": {"key": "storageSize", "type": "int"},
-        "vector_index_size": {"key": "vectorIndexSize", "type": "int"},
     }
 
     def __init__(self, **kwargs: Any) -> None:
@@ -2837,7 +2832,6 @@ class GetIndexStatisticsResult(_serialization.Model):
         super().__init__(**kwargs)
         self.document_count = None
         self.storage_size = None
-        self.vector_index_size = None
 
 
 class HighWaterMarkChangeDetectionPolicy(DataChangeDetectionPolicy):
@@ -5873,11 +5867,6 @@ class SearchField(_serialization.Model):  # pylint: disable=too-many-instance-at
      "standard.lucene", "standardasciifolding.lucene", "keyword", "pattern", "simple", "stop", and
      "whitespace".
     :vartype index_analyzer: str or ~search_service_client.models.LexicalAnalyzerName
-    :ivar dimensions: The dimensionality of the vector field.
-    :vartype dimensions: int
-    :ivar vector_search_profile: The name of the vector search profile that specifies the algorithm
-     to use when searching the vector field.
-    :vartype vector_search_profile: str
     :ivar synonym_maps: A list of the names of synonym maps to associate with this field. This
      option can be used only with searchable fields. Currently only one synonym map per field is
      supported. Assigning a synonym map to a field ensures that query terms targeting that field are
@@ -5892,7 +5881,6 @@ class SearchField(_serialization.Model):  # pylint: disable=too-many-instance-at
     _validation = {
         "name": {"required": True},
         "type": {"required": True},
-        "dimensions": {"maximum": 2048, "minimum": 2},
     }
 
     _attribute_map = {
@@ -5907,8 +5895,6 @@ class SearchField(_serialization.Model):  # pylint: disable=too-many-instance-at
         "analyzer": {"key": "analyzer", "type": "str"},
         "search_analyzer": {"key": "searchAnalyzer", "type": "str"},
         "index_analyzer": {"key": "indexAnalyzer", "type": "str"},
-        "dimensions": {"key": "dimensions", "type": "int"},
-        "vector_search_profile": {"key": "vectorSearchProfile", "type": "str"},
         "synonym_maps": {"key": "synonymMaps", "type": "[str]"},
         "fields": {"key": "fields", "type": "[SearchField]"},
     }
@@ -5927,8 +5913,6 @@ class SearchField(_serialization.Model):  # pylint: disable=too-many-instance-at
         analyzer: Optional[Union[str, "_models.LexicalAnalyzerName"]] = None,
         search_analyzer: Optional[Union[str, "_models.LexicalAnalyzerName"]] = None,
         index_analyzer: Optional[Union[str, "_models.LexicalAnalyzerName"]] = None,
-        dimensions: Optional[int] = None,
-        vector_search_profile: Optional[str] = None,
         synonym_maps: Optional[List[str]] = None,
         fields: Optional[List["_models.SearchField"]] = None,
         **kwargs: Any
@@ -6055,11 +6039,6 @@ class SearchField(_serialization.Model):  # pylint: disable=too-many-instance-at
          "standard.lucene", "standardasciifolding.lucene", "keyword", "pattern", "simple", "stop", and
          "whitespace".
         :paramtype index_analyzer: str or ~search_service_client.models.LexicalAnalyzerName
-        :keyword dimensions: The dimensionality of the vector field.
-        :paramtype dimensions: int
-        :keyword vector_search_profile: The name of the vector search profile that specifies the
-         algorithm to use when searching the vector field.
-        :paramtype vector_search_profile: str
         :keyword synonym_maps: A list of the names of synonym maps to associate with this field. This
          option can be used only with searchable fields. Currently only one synonym map per field is
          supported. Assigning a synonym map to a field ensures that query terms targeting that field are
@@ -6082,8 +6061,6 @@ class SearchField(_serialization.Model):  # pylint: disable=too-many-instance-at
         self.analyzer = analyzer
         self.search_analyzer = search_analyzer
         self.index_analyzer = index_analyzer
-        self.dimensions = dimensions
-        self.vector_search_profile = vector_search_profile
         self.synonym_maps = synonym_maps
         self.fields = fields
 
@@ -6130,11 +6107,6 @@ class SearchIndex(_serialization.Model):  # pylint: disable=too-many-instance-at
      creation time and cannot be modified on existing indexes. If null, the ClassicSimilarity
      algorithm is used.
     :vartype similarity: ~search_service_client.models.Similarity
-    :ivar semantic_settings: Defines parameters for a search index that influence semantic
-     capabilities.
-    :vartype semantic_settings: ~search_service_client.models.SemanticSettings
-    :ivar vector_search: Contains configuration options related to vector search.
-    :vartype vector_search: ~search_service_client.models.VectorSearch
     :ivar e_tag: The ETag of the index.
     :vartype e_tag: str
     """
@@ -6157,8 +6129,6 @@ class SearchIndex(_serialization.Model):  # pylint: disable=too-many-instance-at
         "char_filters": {"key": "charFilters", "type": "[CharFilter]"},
         "encryption_key": {"key": "encryptionKey", "type": "SearchResourceEncryptionKey"},
         "similarity": {"key": "similarity", "type": "Similarity"},
-        "semantic_settings": {"key": "semantic", "type": "SemanticSettings"},
-        "vector_search": {"key": "vectorSearch", "type": "VectorSearch"},
         "e_tag": {"key": "@odata\\.etag", "type": "str"},
     }
 
@@ -6177,8 +6147,6 @@ class SearchIndex(_serialization.Model):  # pylint: disable=too-many-instance-at
         char_filters: Optional[List["_models.CharFilter"]] = None,
         encryption_key: Optional["_models.SearchResourceEncryptionKey"] = None,
         similarity: Optional["_models.Similarity"] = None,
-        semantic_settings: Optional["_models.SemanticSettings"] = None,
-        vector_search: Optional["_models.VectorSearch"] = None,
         e_tag: Optional[str] = None,
         **kwargs: Any
     ) -> None:
@@ -6219,11 +6187,6 @@ class SearchIndex(_serialization.Model):  # pylint: disable=too-many-instance-at
          creation time and cannot be modified on existing indexes. If null, the ClassicSimilarity
          algorithm is used.
         :paramtype similarity: ~search_service_client.models.Similarity
-        :keyword semantic_settings: Defines parameters for a search index that influence semantic
-         capabilities.
-        :paramtype semantic_settings: ~search_service_client.models.SemanticSettings
-        :keyword vector_search: Contains configuration options related to vector search.
-        :paramtype vector_search: ~search_service_client.models.VectorSearch
         :keyword e_tag: The ETag of the index.
         :paramtype e_tag: str
         """
@@ -6240,8 +6203,6 @@ class SearchIndex(_serialization.Model):  # pylint: disable=too-many-instance-at
         self.char_filters = char_filters
         self.encryption_key = encryption_key
         self.similarity = similarity
-        self.semantic_settings = semantic_settings
-        self.vector_search = vector_search
         self.e_tag = e_tag
 
 

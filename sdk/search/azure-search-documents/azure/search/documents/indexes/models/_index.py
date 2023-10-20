@@ -152,11 +152,6 @@ class SearchField(_serialization.Model):
      "standard.lucene", "standardasciifolding.lucene", "keyword", "pattern", "simple", "stop", and
      "whitespace".
     :vartype index_analyzer: str or ~search_service_client.models.LexicalAnalyzerName
-    :ivar dimensions: The dimensionality of the vector field.
-    :vartype dimensions: int
-    :ivar vector_search_profile: The name of the vector search profile that specifies the algorithm
-     to use when searching the vector field.
-    :vartype vector_search_profile: str
     :ivar synonym_maps: A list of the names of synonym maps to associate with this field. This
      option can be used only with searchable fields. Currently only one synonym map per field is
      supported. Assigning a synonym map to a field ensures that query terms targeting that field are
@@ -187,11 +182,6 @@ class SearchField(_serialization.Model):
         "index_analyzer_name": {"key": "indexAnalyzerName", "type": "str"},
         "synonym_map_names": {"key": "synonymMapNames", "type": "[str]"},
         "fields": {"key": "fields", "type": "[SearchField]"},
-        "vector_search_dimensions": {"key": "vectorSearchDimensions", "type": "int"},
-        "vector_search_profile": {
-            "key": "vectorSearchProfile",
-            "type": "str",
-        },
     }
 
     def __init__(self, **kwargs):
@@ -209,8 +199,6 @@ class SearchField(_serialization.Model):
         self.index_analyzer_name = kwargs.get("index_analyzer_name", None)
         self.synonym_map_names = kwargs.get("synonym_map_names", None)
         self.fields = kwargs.get("fields", None)
-        self.vector_search_dimensions = kwargs.get("vector_search_dimensions", None)
-        self.vector_search_profile = kwargs.get("vector_search_profile", None)
 
     def _to_generated(self) -> _SearchField:
         fields = [pack_search_field(x) for x in self.fields] if self.fields else None
@@ -229,8 +217,6 @@ class SearchField(_serialization.Model):
             index_analyzer=self.index_analyzer_name,
             synonym_maps=self.synonym_map_names,
             fields=fields,
-            dimensions=self.vector_search_dimensions,
-            vector_search_profile=self.vector_search_profile,
         )
 
     @classmethod
@@ -254,8 +240,6 @@ class SearchField(_serialization.Model):
             index_analyzer_name=search_field.index_analyzer,
             synonym_map_names=search_field.synonym_maps,
             fields=fields,
-            vector_search_dimensions=search_field.dimensions,
-            vector_search_profile=search_field.vector_search_profile,
         )
 
 
@@ -516,10 +500,6 @@ class SearchIndex(_serialization.Model):
      creation time and cannot be modified on existing indexes. If null, the ClassicSimilarity
      algorithm is used.
     :vartype similarity: ~azure.search.documents.indexes.models.SimilarityAlgorithm
-    :ivar semantic_settings: Defines parameters for a search index that influence semantic capabilities.
-    :vartype semantic_settings: ~azure.search.documents.indexes.models.SemanticSettings
-    :ivar vector_search: Defines parameters for a search index that influence scoring in a vector space.
-    :vartype vector_search: ~azure.search.documents.indexes.models.VectorSearch
     :ivar e_tag: The ETag of the index.
     :vartype e_tag: str
     """
@@ -545,8 +525,6 @@ class SearchIndex(_serialization.Model):
             "type": "SearchResourceEncryptionKey",
         },
         "similarity": {"key": "similarity", "type": "SimilarityAlgorithm"},
-        "semantic_settings": {"key": "semantic", "type": "SemanticSettings"},
-        "vector_search": {"key": "vectorSearch", "type": "VectorSearch"},
         "e_tag": {"key": "@odata\\.etag", "type": "str"},
     }
 
@@ -564,8 +542,6 @@ class SearchIndex(_serialization.Model):
         self.char_filters = kwargs.get("char_filters", None)
         self.encryption_key = kwargs.get("encryption_key", None)
         self.similarity = kwargs.get("similarity", None)
-        self.semantic_settings = kwargs.get("semantic_settings", None)
-        self.vector_search = kwargs.get("vector_search", None)
         self.e_tag = kwargs.get("e_tag", None)
 
     def _to_generated(self) -> _SearchIndex:
@@ -598,9 +574,7 @@ class SearchIndex(_serialization.Model):
             # pylint:disable=protected-access
             encryption_key=self.encryption_key._to_generated() if self.encryption_key else None,
             similarity=self.similarity,
-            semantic_settings=self.semantic_settings,
             e_tag=self.e_tag,
-            vector_search=self.vector_search,
         )
 
     @classmethod
@@ -636,9 +610,7 @@ class SearchIndex(_serialization.Model):
             # pylint:disable=protected-access
             encryption_key=SearchResourceEncryptionKey._from_generated(search_index.encryption_key),
             similarity=search_index.similarity,
-            semantic_settings=search_index.semantic_settings,
             e_tag=search_index.e_tag,
-            vector_search=search_index.vector_search,
         )
 
 
@@ -660,8 +632,6 @@ def pack_search_field(search_field: SearchField) -> _SearchField:
         synonym_map_names = search_field.get("synonym_map_names")
         fields = search_field.get("fields")
         fields = [pack_search_field(x) for x in fields] if fields else None
-        vector_search_dimensions = search_field.get("vector_search_dimensions")
-        vector_search_profile = search_field.get("vector_search_profile")
         return _SearchField(
             name=name,
             type=field_type,
@@ -676,7 +646,5 @@ def pack_search_field(search_field: SearchField) -> _SearchField:
             index_analyzer=index_analyzer_name,
             synonym_maps=synonym_map_names,
             fields=fields,
-            vector_search_dimensions=vector_search_dimensions,
-            vector_search_profile=vector_search_profile,
         )
     return search_field._to_generated()  # pylint:disable=protected-access

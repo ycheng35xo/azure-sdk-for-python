@@ -111,10 +111,6 @@ class QueryType(str, Enum, metaclass=CaseInsensitiveEnumMeta):
     """Uses the full Lucene query syntax for searches. Search text is interpreted using the Lucene
     #: query language which allows field-specific and weighted searches, as well as other advanced
     #: features."""
-    SEMANTIC = "semantic"
-    """Best suited for queries expressed in natural language as opposed to keywords. Improves
-    #: precision of search results by re-ranking the top search results using a ranking model trained
-    #: on the Web corpus."""
 
 
 class ScoringStatistics(str, Enum, metaclass=CaseInsensitiveEnumMeta):

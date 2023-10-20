@@ -25,40 +25,18 @@
 # --------------------------------------------------------------------------
 
 from .._generated.models import (
-    AnswerResult,
     AutocompleteMode,
-    CaptionResult,
     IndexAction,
     IndexingResult,
-    QueryAnswerType,
-    QueryCaptionType,
     QueryType,
-    RawVectorQuery,
-    ScoringStatistics,
     SearchMode,
-    SemanticErrorHandling,
-    VectorFilterMode,
-    VectorQuery,
-    VectorQueryKind,
 )
-from .._utils import odata
 
 
 __all__ = (
-    "AnswerResult",
     "AutocompleteMode",
-    "CaptionResult",
     "IndexAction",
     "IndexingResult",
-    "odata",
-    "QueryAnswerType",
-    "QueryCaptionType",
     "QueryType",
-    "RawVectorQuery",
-    "ScoringStatistics",
     "SearchMode",
-    "SemanticErrorHandling",
-    "VectorFilterMode",
-    "VectorQuery",
-    "VectorQueryKind",
 )
