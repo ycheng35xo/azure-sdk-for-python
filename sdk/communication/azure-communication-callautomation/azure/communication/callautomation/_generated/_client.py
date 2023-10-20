@@ -17,17 +17,9 @@ from azure.core.rest import HttpRequest, HttpResponse
 from . import models as _models
 from ._configuration import AzureCommunicationCallAutomationServiceConfiguration
 from ._serialization import Deserializer, Serializer
-from .operations import (
-    AzureCommunicationCallAutomationServiceOperationsMixin,
-    CallConnectionOperations,
-    CallMediaOperations,
-    CallRecordingOperations,
-)
+from .operations import AzureCommunicationCallAutomationServiceOperationsMixin, CallConnectionOperations, CallMediaOperations, CallRecordingOperations
 
-
-class AzureCommunicationCallAutomationService(
-    AzureCommunicationCallAutomationServiceOperationsMixin
-):  # pylint: disable=client-accepts-api-version-keyword
+class AzureCommunicationCallAutomationService(AzureCommunicationCallAutomationServiceOperationsMixin):  # pylint: disable=client-accepts-api-version-keyword
     """Azure Communication Service Call Automation APIs.
 
     :ivar call_connection: CallConnectionOperations operations
@@ -46,40 +38,41 @@ class AzureCommunicationCallAutomationService(
     :paramtype api_version: str
     """
 
-    def __init__(self, endpoint: str, credential: AzureKeyCredential, **kwargs: Any) -> None:
-        _endpoint = "{endpoint}"
-        self._config = AzureCommunicationCallAutomationServiceConfiguration(
-            endpoint=endpoint, credential=credential, **kwargs
-        )
-        _policies = kwargs.pop("policies", None)
+    def __init__(
+        self,
+        endpoint: str,
+        credential: AzureKeyCredential,
+        **kwargs: Any
+    ) -> None:
+        _endpoint = '{endpoint}'
+        self._config = AzureCommunicationCallAutomationServiceConfiguration(endpoint=endpoint, credential=credential, **kwargs)
+        _policies = kwargs.pop('policies', None)
         if _policies is None:
-            _policies = [
-                policies.RequestIdPolicy(**kwargs),
-                self._config.headers_policy,
-                self._config.user_agent_policy,
-                self._config.proxy_policy,
-                policies.ContentDecodePolicy(**kwargs),
-                self._config.redirect_policy,
-                self._config.retry_policy,
-                self._config.authentication_policy,
-                self._config.custom_hook_policy,
-                self._config.logging_policy,
-                policies.DistributedTracingPolicy(**kwargs),
-                policies.SensitiveHeaderCleanupPolicy(**kwargs) if self._config.redirect_policy else None,
-                self._config.http_logging_policy,
-            ]
+            _policies = [policies.RequestIdPolicy(**kwargs),self._config.headers_policy,self._config.user_agent_policy,self._config.proxy_policy,policies.ContentDecodePolicy(**kwargs),self._config.redirect_policy,self._config.retry_policy,self._config.authentication_policy,self._config.custom_hook_policy,self._config.logging_policy,policies.DistributedTracingPolicy(**kwargs),policies.SensitiveHeaderCleanupPolicy(**kwargs) if self._config.redirect_policy else None,self._config.http_logging_policy]
         self._client: PipelineClient = PipelineClient(base_url=_endpoint, policies=_policies, **kwargs)
+
 
         client_models = {k: v for k, v in _models._models.__dict__.items() if isinstance(v, type)}
         client_models.update({k: v for k, v in _models.__dict__.items() if isinstance(v, type)})
         self._serialize = Serializer(client_models)
         self._deserialize = Deserializer(client_models)
         self._serialize.client_side_validation = False
-        self.call_connection = CallConnectionOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.call_media = CallMediaOperations(self._client, self._config, self._serialize, self._deserialize)
-        self.call_recording = CallRecordingOperations(self._client, self._config, self._serialize, self._deserialize)
+        self.call_connection = CallConnectionOperations(
+            self._client, self._config, self._serialize, self._deserialize
+        )
+        self.call_media = CallMediaOperations(
+            self._client, self._config, self._serialize, self._deserialize
+        )
+        self.call_recording = CallRecordingOperations(
+            self._client, self._config, self._serialize, self._deserialize
+        )
 
-    def send_request(self, request: HttpRequest, **kwargs: Any) -> HttpResponse:
+
+    def send_request(
+        self,
+        request: HttpRequest,
+        **kwargs: Any
+    ) -> HttpResponse:
         """Runs the network request through the client's chained policies.
 
         >>> from azure.core.rest import HttpRequest
@@ -99,11 +92,11 @@ class AzureCommunicationCallAutomationService(
 
         request_copy = deepcopy(request)
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
 
         request_copy.url = self._client.format_url(request_copy.url, **path_format_arguments)
-        return self._client.send_request(request_copy, **kwargs)
+        return self._client.send_request(request_copy, **kwargs)  # type: ignore
 
     def close(self) -> None:
         self._client.close()

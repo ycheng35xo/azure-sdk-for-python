@@ -11,14 +11,7 @@ from typing import Any, AsyncIterable, Callable, Dict, IO, Optional, TypeVar, Un
 import urllib.parse
 
 from azure.core.async_paging import AsyncItemPaged, AsyncList
-from azure.core.exceptions import (
-    ClientAuthenticationError,
-    HttpResponseError,
-    ResourceExistsError,
-    ResourceNotFoundError,
-    ResourceNotModifiedError,
-    map_error,
-)
+from azure.core.exceptions import ClientAuthenticationError, HttpResponseError, ResourceExistsError, ResourceNotFoundError, ResourceNotModifiedError, map_error
 from azure.core.pipeline import PipelineResponse
 from azure.core.rest import AsyncHttpResponse, HttpRequest
 from azure.core.tracing.decorator import distributed_trace
@@ -26,45 +19,22 @@ from azure.core.tracing.decorator_async import distributed_trace_async
 from azure.core.utils import case_insensitive_dict
 
 from ... import models as _models
-from ...operations._operations import (
-    build_azure_communication_call_automation_service_answer_call_request,
-    build_azure_communication_call_automation_service_create_call_request,
-    build_azure_communication_call_automation_service_redirect_call_request,
-    build_azure_communication_call_automation_service_reject_call_request,
-    build_call_connection_add_participant_request,
-    build_call_connection_cancel_add_participant_request,
-    build_call_connection_get_call_request,
-    build_call_connection_get_participant_request,
-    build_call_connection_get_participants_request,
-    build_call_connection_hangup_call_request,
-    build_call_connection_mute_request,
-    build_call_connection_remove_participant_request,
-    build_call_connection_terminate_call_request,
-    build_call_connection_transfer_to_participant_request,
-    build_call_media_cancel_all_media_operations_request,
-    build_call_media_play_request,
-    build_call_media_recognize_request,
-    build_call_media_send_dtmf_tones_request,
-    build_call_media_start_continuous_dtmf_recognition_request,
-    build_call_media_stop_continuous_dtmf_recognition_request,
-    build_call_recording_get_recording_properties_request,
-    build_call_recording_pause_recording_request,
-    build_call_recording_resume_recording_request,
-    build_call_recording_start_recording_request,
-    build_call_recording_stop_recording_request,
-)
+from ...operations._operations import build_azure_communication_call_automation_service_answer_call_request, build_azure_communication_call_automation_service_create_call_request, build_azure_communication_call_automation_service_redirect_call_request, build_azure_communication_call_automation_service_reject_call_request, build_call_connection_add_participant_request, build_call_connection_cancel_add_participant_request, build_call_connection_get_call_request, build_call_connection_get_participant_request, build_call_connection_get_participants_request, build_call_connection_hangup_call_request, build_call_connection_mute_request, build_call_connection_remove_participant_request, build_call_connection_terminate_call_request, build_call_connection_transfer_to_participant_request, build_call_media_cancel_all_media_operations_request, build_call_media_play_request, build_call_media_recognize_request, build_call_media_send_dtmf_tones_request, build_call_media_start_continuous_dtmf_recognition_request, build_call_media_stop_continuous_dtmf_recognition_request, build_call_recording_get_recording_properties_request, build_call_recording_pause_recording_request, build_call_recording_resume_recording_request, build_call_recording_start_recording_request, build_call_recording_stop_recording_request
 from .._vendor import AzureCommunicationCallAutomationServiceMixinABC
-
-T = TypeVar("T")
+T = TypeVar('T')
 ClsType = Optional[Callable[[PipelineResponse[HttpRequest, AsyncHttpResponse], T, Dict[str, Any]], Any]]
 
-
-class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable=name-too-long
+class AzureCommunicationCallAutomationServiceOperationsMixin(   # pylint: disable=name-too-long
     AzureCommunicationCallAutomationServiceMixinABC
 ):
+
     @overload
     async def create_call(
-        self, create_call_request: _models.CreateCallRequest, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        create_call_request: _models.CreateCallRequest,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> _models.CallConnectionProperties:
         """Create an outbound call.
 
@@ -82,7 +52,11 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
 
     @overload
     async def create_call(
-        self, create_call_request: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        create_call_request: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> _models.CallConnectionProperties:
         """Create an outbound call.
 
@@ -98,9 +72,12 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def create_call(
-        self, create_call_request: Union[_models.CreateCallRequest, IO], **kwargs: Any
+        self,
+        create_call_request: Union[_models.CreateCallRequest, IO],
+        **kwargs: Any
     ) -> _models.CallConnectionProperties:
         """Create an outbound call.
 
@@ -117,18 +94,17 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.CallConnectionProperties] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.CallConnectionProperties] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -136,9 +112,9 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         if isinstance(create_call_request, (IOBase, bytes)):
             _content = create_call_request
         else:
-            _json = self._serialize.body(create_call_request, "CreateCallRequest")
+            _json = self._serialize.body(create_call_request, 'CreateCallRequest')
 
-        request = build_azure_communication_call_automation_service_create_call_request(
+        _request = build_azure_communication_call_automation_service_create_call_request(
             content_type=content_type,
             api_version=self._config.api_version,
             json=_json,
@@ -147,34 +123,45 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # type: ignore # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [201]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("CallConnectionProperties", pipeline_response)
+        deserialized = self._deserialize(
+            'CallConnectionProperties',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @overload
     async def answer_call(
-        self, answer_call_request: _models.AnswerCallRequest, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        answer_call_request: _models.AnswerCallRequest,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> _models.CallConnectionProperties:
         """Answer a Call.
 
@@ -192,7 +179,11 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
 
     @overload
     async def answer_call(
-        self, answer_call_request: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        answer_call_request: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> _models.CallConnectionProperties:
         """Answer a Call.
 
@@ -208,9 +199,12 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def answer_call(
-        self, answer_call_request: Union[_models.AnswerCallRequest, IO], **kwargs: Any
+        self,
+        answer_call_request: Union[_models.AnswerCallRequest, IO],
+        **kwargs: Any
     ) -> _models.CallConnectionProperties:
         """Answer a Call.
 
@@ -227,18 +221,17 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.CallConnectionProperties] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.CallConnectionProperties] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -246,9 +239,9 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         if isinstance(answer_call_request, (IOBase, bytes)):
             _content = answer_call_request
         else:
-            _json = self._serialize.body(answer_call_request, "AnswerCallRequest")
+            _json = self._serialize.body(answer_call_request, 'AnswerCallRequest')
 
-        request = build_azure_communication_call_automation_service_answer_call_request(
+        _request = build_azure_communication_call_automation_service_answer_call_request(
             content_type=content_type,
             api_version=self._config.api_version,
             json=_json,
@@ -257,30 +250,37 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # type: ignore # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("CallConnectionProperties", pipeline_response)
+        deserialized = self._deserialize(
+            'CallConnectionProperties',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @overload
     async def redirect_call(  # pylint: disable=inconsistent-return-statements
@@ -306,7 +306,11 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
 
     @overload
     async def redirect_call(  # pylint: disable=inconsistent-return-statements
-        self, redirect_call_request: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        redirect_call_request: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> None:
         """Redirect a call.
 
@@ -322,9 +326,12 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def redirect_call(  # pylint: disable=inconsistent-return-statements
-        self, redirect_call_request: Union[_models.RedirectCallRequest, IO], **kwargs: Any
+        self,
+        redirect_call_request: Union[_models.RedirectCallRequest, IO],
+        **kwargs: Any
     ) -> None:
         """Redirect a call.
 
@@ -342,18 +349,17 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -361,9 +367,9 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         if isinstance(redirect_call_request, (IOBase, bytes)):
             _content = redirect_call_request
         else:
-            _json = self._serialize.body(redirect_call_request, "RedirectCallRequest")
+            _json = self._serialize.body(redirect_call_request, 'RedirectCallRequest')
 
-        request = build_azure_communication_call_automation_service_redirect_call_request(
+        _request = build_azure_communication_call_automation_service_redirect_call_request(
             content_type=content_type,
             api_version=self._config.api_version,
             json=_json,
@@ -372,30 +378,38 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # type: ignore # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [204]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @overload
     async def reject_call(  # pylint: disable=inconsistent-return-statements
-        self, reject_call_request: _models.RejectCallRequest, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        reject_call_request: _models.RejectCallRequest,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> None:
         """Reject the call.
 
@@ -413,7 +427,11 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
 
     @overload
     async def reject_call(  # pylint: disable=inconsistent-return-statements
-        self, reject_call_request: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        reject_call_request: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> None:
         """Reject the call.
 
@@ -429,9 +447,12 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def reject_call(  # pylint: disable=inconsistent-return-statements
-        self, reject_call_request: Union[_models.RejectCallRequest, IO], **kwargs: Any
+        self,
+        reject_call_request: Union[_models.RejectCallRequest, IO],
+        **kwargs: Any
     ) -> None:
         """Reject the call.
 
@@ -448,18 +469,17 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -467,9 +487,9 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
         if isinstance(reject_call_request, (IOBase, bytes)):
             _content = reject_call_request
         else:
-            _json = self._serialize.body(reject_call_request, "RejectCallRequest")
+            _json = self._serialize.body(reject_call_request, 'RejectCallRequest')
 
-        request = build_azure_communication_call_automation_service_reject_call_request(
+        _request = build_azure_communication_call_automation_service_reject_call_request(
             content_type=content_type,
             api_version=self._config.api_version,
             json=_json,
@@ -478,29 +498,31 @@ class AzureCommunicationCallAutomationServiceOperationsMixin(  # pylint: disable
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
         pipeline_response: PipelineResponse = await self._client._pipeline.run(  # type: ignore # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [204]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
 
 
-class CallConnectionOperations:
+class CallConnectionOperations: 
     """
     .. warning::
         **DO NOT** instantiate this class directly.
@@ -519,8 +541,13 @@ class CallConnectionOperations:
         self._serialize = input_args.pop(0) if input_args else kwargs.pop("serializer")
         self._deserialize = input_args.pop(0) if input_args else kwargs.pop("deserializer")
 
+
     @distributed_trace_async
-    async def get_call(self, call_connection_id: str, **kwargs: Any) -> _models.CallConnectionProperties:
+    async def get_call(
+        self,
+        call_connection_id: str,
+        **kwargs: Any
+    ) -> _models.CallConnectionProperties:
         """Get the detail properties of an ongoing call.
 
         Get the detail properties of an ongoing call.
@@ -532,53 +559,62 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[_models.CallConnectionProperties] = kwargs.pop("cls", None)
+        cls: ClsType[_models.CallConnectionProperties] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_connection_get_call_request(
+        
+        _request = build_call_connection_get_call_request(
             call_connection_id=call_connection_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("CallConnectionProperties", pipeline_response)
+        deserialized = self._deserialize(
+            'CallConnectionProperties',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @distributed_trace_async
     async def hangup_call(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, **kwargs: Any
+        self,
+        call_connection_id: str,
+        **kwargs: Any
     ) -> None:
         """Hang up call automation service from the call. This will make call automation service leave the
         call, but does not terminate if there are more than 1 caller in the call.
@@ -593,49 +629,55 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_connection_hangup_call_request(
+        
+        _request = build_call_connection_hangup_call_request(
             call_connection_id=call_connection_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [204]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @distributed_trace_async
     async def terminate_call(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, **kwargs: Any
+        self,
+        call_connection_id: str,
+        **kwargs: Any
     ) -> None:
         """Terminate a call using CallConnectionId.
 
@@ -648,45 +690,49 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_connection_terminate_call_request(
+        
+        _request = build_call_connection_terminate_call_request(
             call_connection_id=call_connection_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [204]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @overload
     async def transfer_to_participant(
@@ -739,6 +785,7 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def transfer_to_participant(
         self,
@@ -764,18 +811,17 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.TransferCallResponse] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.TransferCallResponse] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -783,9 +829,9 @@ class CallConnectionOperations:
         if isinstance(transfer_to_participant_request, (IOBase, bytes)):
             _content = transfer_to_participant_request
         else:
-            _json = self._serialize.body(transfer_to_participant_request, "TransferToParticipantRequest")
+            _json = self._serialize.body(transfer_to_participant_request, 'TransferToParticipantRequest')
 
-        request = build_call_connection_transfer_to_participant_request(
+        _request = build_call_connection_transfer_to_participant_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -795,33 +841,44 @@ class CallConnectionOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("TransferCallResponse", pipeline_response)
+        deserialized = self._deserialize(
+            'TransferCallResponse',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @distributed_trace
-    def get_participants(self, call_connection_id: str, **kwargs: Any) -> AsyncIterable["_models.CallParticipant"]:
+    def get_participants(
+        self,
+        call_connection_id: str,
+        **kwargs: Any
+    ) -> AsyncIterable["_models.CallParticipant"]:
         """Get participants from a call.
 
         Get participants from a call.
@@ -837,83 +894,76 @@ class CallConnectionOperations:
         _params = kwargs.pop("params", {}) or {}
 
         cls: ClsType[_models._models.GetParticipantsResponse] = kwargs.pop(  # pylint: disable=protected-access
-            "cls", None
+            'cls', None
         )
 
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
-
+        error_map.update(kwargs.pop('error_map', {}) or {})
         def prepare_request(next_link=None):
             if not next_link:
-
-                request = build_call_connection_get_participants_request(
+                
+                _request = build_call_connection_get_participants_request(
                     call_connection_id=call_connection_id,
                     api_version=self._config.api_version,
                     headers=_headers,
                     params=_params,
                 )
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
-                    ),
+                    "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
             else:
                 # make call to next link with the client's api-version
                 _parsed_next_link = urllib.parse.urlparse(next_link)
-                _next_request_params = case_insensitive_dict(
-                    {
-                        key: [urllib.parse.quote(v) for v in value]
-                        for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()
-                    }
-                )
+                _next_request_params = case_insensitive_dict({
+                    key: [urllib.parse.quote(v) for v in value]    for key, value in urllib.parse.parse_qs(_parsed_next_link.query).items()})
                 _next_request_params["api-version"] = self._config.api_version
-                request = HttpRequest(
-                    "GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params
-                )
+                _request = HttpRequest("GET", urllib.parse.urljoin(next_link, _parsed_next_link.path), params=_next_request_params)
                 path_format_arguments = {
-                    "endpoint": self._serialize.url(
-                        "self._config.endpoint", self._config.endpoint, "str", skip_quote=True
-                    ),
+                    "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
                 }
-                request.url = self._client.format_url(request.url, **path_format_arguments)
+                _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
-            return request
+            return _request
 
         async def extract_data(pipeline_response):
             deserialized = self._deserialize(
-                _models._models.GetParticipantsResponse, pipeline_response  # pylint: disable=protected-access
-            )
+            _models._models.GetParticipantsResponse,  # pylint: disable=protected-access
+            pipeline_response
+        )
             list_of_elem = deserialized.value
             if cls:
-                list_of_elem = cls(list_of_elem)  # type: ignore
+                list_of_elem = cls(list_of_elem) # type: ignore
             return deserialized.next_link or None, AsyncList(list_of_elem)
 
         async def get_next(next_link=None):
-            request = prepare_request(next_link)
+            _request = prepare_request(next_link)
 
             _stream = False
-            pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-                request, stream=_stream, **kwargs
+            pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+                _request,
+                stream=_stream,
+                **kwargs
             )
             response = pipeline_response.http_response
 
             if response.status_code not in [200]:
                 if _stream:
-                    await response.read()  # Load the body in memory and close the socket
+                    await  response.read()  # Load the body in memory and close the socket
                 map_error(status_code=response.status_code, response=response, error_map=error_map)
                 error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
                 raise HttpResponseError(response=response, model=error)
 
             return pipeline_response
 
-        return AsyncItemPaged(get_next, extract_data)
+
+        return AsyncItemPaged(
+            get_next, extract_data
+        )
+
 
     @overload
     async def add_participant(
@@ -965,9 +1015,13 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def add_participant(
-        self, call_connection_id: str, add_participant_request: Union[_models.AddParticipantRequest, IO], **kwargs: Any
+        self,
+        call_connection_id: str,
+        add_participant_request: Union[_models.AddParticipantRequest, IO],
+        **kwargs: Any
     ) -> _models.AddParticipantResponse:
         """Add a participant to the call.
 
@@ -986,18 +1040,17 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.AddParticipantResponse] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.AddParticipantResponse] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1005,9 +1058,9 @@ class CallConnectionOperations:
         if isinstance(add_participant_request, (IOBase, bytes)):
             _content = add_participant_request
         else:
-            _json = self._serialize.body(add_participant_request, "AddParticipantRequest")
+            _json = self._serialize.body(add_participant_request, 'AddParticipantRequest')
 
-        request = build_call_connection_add_participant_request(
+        _request = build_call_connection_add_participant_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1017,30 +1070,37 @@ class CallConnectionOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("AddParticipantResponse", pipeline_response)
+        deserialized = self._deserialize(
+            'AddParticipantResponse',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @overload
     async def remove_participant(
@@ -1093,6 +1153,7 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def remove_participant(
         self,
@@ -1118,18 +1179,17 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.RemoveParticipantResponse] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.RemoveParticipantResponse] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1137,9 +1197,9 @@ class CallConnectionOperations:
         if isinstance(remove_participant_request, (IOBase, bytes)):
             _content = remove_participant_request
         else:
-            _json = self._serialize.body(remove_participant_request, "RemoveParticipantRequest")
+            _json = self._serialize.body(remove_participant_request, 'RemoveParticipantRequest')
 
-        request = build_call_connection_remove_participant_request(
+        _request = build_call_connection_remove_participant_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1149,30 +1209,37 @@ class CallConnectionOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("RemoveParticipantResponse", pipeline_response)
+        deserialized = self._deserialize(
+            'RemoveParticipantResponse',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @overload
     async def mute(
@@ -1225,6 +1292,7 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def mute(
         self,
@@ -1250,18 +1318,17 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.MuteParticipantsResult] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.MuteParticipantsResult] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1269,9 +1336,9 @@ class CallConnectionOperations:
         if isinstance(mute_participants_request, (IOBase, bytes)):
             _content = mute_participants_request
         else:
-            _json = self._serialize.body(mute_participants_request, "MuteParticipantsRequest")
+            _json = self._serialize.body(mute_participants_request, 'MuteParticipantsRequest')
 
-        request = build_call_connection_mute_request(
+        _request = build_call_connection_mute_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1281,30 +1348,37 @@ class CallConnectionOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("MuteParticipantsResult", pipeline_response)
+        deserialized = self._deserialize(
+            'MuteParticipantsResult',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @overload
     async def cancel_add_participant(
@@ -1357,6 +1431,7 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def cancel_add_participant(
         self,
@@ -1382,18 +1457,17 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.CancelAddParticipantResponse] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.CancelAddParticipantResponse] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1401,9 +1475,9 @@ class CallConnectionOperations:
         if isinstance(cancel_add_participant_request, (IOBase, bytes)):
             _content = cancel_add_participant_request
         else:
-            _json = self._serialize.body(cancel_add_participant_request, "CancelAddParticipantRequest")
+            _json = self._serialize.body(cancel_add_participant_request, 'CancelAddParticipantRequest')
 
-        request = build_call_connection_cancel_add_participant_request(
+        _request = build_call_connection_cancel_add_participant_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1413,34 +1487,44 @@ class CallConnectionOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("CancelAddParticipantResponse", pipeline_response)
+        deserialized = self._deserialize(
+            'CancelAddParticipantResponse',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @distributed_trace_async
     async def get_participant(
-        self, call_connection_id: str, participant_raw_id: str, **kwargs: Any
+        self,
+        call_connection_id: str,
+        participant_raw_id: str,
+        **kwargs: Any
     ) -> _models.CallParticipant:
         """Get participant from a call.
 
@@ -1455,19 +1539,19 @@ class CallConnectionOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[_models.CallParticipant] = kwargs.pop("cls", None)
+        cls: ClsType[_models.CallParticipant] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_connection_get_participant_request(
+        
+        _request = build_call_connection_get_participant_request(
             call_connection_id=call_connection_id,
             participant_raw_id=participant_raw_id,
             api_version=self._config.api_version,
@@ -1475,33 +1559,38 @@ class CallConnectionOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("CallParticipant", pipeline_response)
+        deserialized = self._deserialize(
+            'CallParticipant',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
 
 
-class CallMediaOperations:
+class CallMediaOperations: 
     """
     .. warning::
         **DO NOT** instantiate this class directly.
@@ -1519,6 +1608,7 @@ class CallMediaOperations:
         self._config = input_args.pop(0) if input_args else kwargs.pop("config")
         self._serialize = input_args.pop(0) if input_args else kwargs.pop("serializer")
         self._deserialize = input_args.pop(0) if input_args else kwargs.pop("deserializer")
+
 
     @overload
     async def play(  # pylint: disable=inconsistent-return-statements
@@ -1547,7 +1637,12 @@ class CallMediaOperations:
 
     @overload
     async def play(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, play_request: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        call_connection_id: str,
+        play_request: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> None:
         """Plays audio to participants in the call.
 
@@ -1565,9 +1660,13 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def play(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, play_request: Union[_models.PlayRequest, IO], **kwargs: Any
+        self,
+        call_connection_id: str,
+        play_request: Union[_models.PlayRequest, IO],
+        **kwargs: Any
     ) -> None:
         """Plays audio to participants in the call.
 
@@ -1585,18 +1684,17 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1604,9 +1702,9 @@ class CallMediaOperations:
         if isinstance(play_request, (IOBase, bytes)):
             _content = play_request
         else:
-            _json = self._serialize.body(play_request, "PlayRequest")
+            _json = self._serialize.body(play_request, 'PlayRequest')
 
-        request = build_call_media_play_request(
+        _request = build_call_media_play_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1616,30 +1714,36 @@ class CallMediaOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @distributed_trace_async
     async def cancel_all_media_operations(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, **kwargs: Any
+        self,
+        call_connection_id: str,
+        **kwargs: Any
     ) -> None:
         """Cancel all media operations in a call.
 
@@ -1652,45 +1756,49 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_media_cancel_all_media_operations_request(
+        
+        _request = build_call_media_cancel_all_media_operations_request(
             call_connection_id=call_connection_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @overload
     async def recognize(  # pylint: disable=inconsistent-return-statements
@@ -1719,7 +1827,12 @@ class CallMediaOperations:
 
     @overload
     async def recognize(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, recognize_request: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        call_connection_id: str,
+        recognize_request: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> None:
         """Recognize media from call.
 
@@ -1737,9 +1850,13 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def recognize(  # pylint: disable=inconsistent-return-statements
-        self, call_connection_id: str, recognize_request: Union[_models.RecognizeRequest, IO], **kwargs: Any
+        self,
+        call_connection_id: str,
+        recognize_request: Union[_models.RecognizeRequest, IO],
+        **kwargs: Any
     ) -> None:
         """Recognize media from call.
 
@@ -1758,18 +1875,17 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1777,9 +1893,9 @@ class CallMediaOperations:
         if isinstance(recognize_request, (IOBase, bytes)):
             _content = recognize_request
         else:
-            _json = self._serialize.body(recognize_request, "RecognizeRequest")
+            _json = self._serialize.body(recognize_request, 'RecognizeRequest')
 
-        request = build_call_media_recognize_request(
+        _request = build_call_media_recognize_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1789,26 +1905,30 @@ class CallMediaOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @overload
     async def start_continuous_dtmf_recognition(  # pylint: disable=inconsistent-return-statements
@@ -1861,6 +1981,7 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def start_continuous_dtmf_recognition(  # pylint: disable=inconsistent-return-statements
         self,
@@ -1886,18 +2007,17 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -1905,9 +2025,9 @@ class CallMediaOperations:
         if isinstance(continuous_dtmf_recognition_request, (IOBase, bytes)):
             _content = continuous_dtmf_recognition_request
         else:
-            _json = self._serialize.body(continuous_dtmf_recognition_request, "ContinuousDtmfRecognitionRequest")
+            _json = self._serialize.body(continuous_dtmf_recognition_request, 'ContinuousDtmfRecognitionRequest')
 
-        request = build_call_media_start_continuous_dtmf_recognition_request(
+        _request = build_call_media_start_continuous_dtmf_recognition_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -1917,26 +2037,30 @@ class CallMediaOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @overload
     async def stop_continuous_dtmf_recognition(  # pylint: disable=inconsistent-return-statements
@@ -1989,6 +2113,7 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def stop_continuous_dtmf_recognition(  # pylint: disable=inconsistent-return-statements
         self,
@@ -2014,18 +2139,17 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -2033,9 +2157,9 @@ class CallMediaOperations:
         if isinstance(continuous_dtmf_recognition_request, (IOBase, bytes)):
             _content = continuous_dtmf_recognition_request
         else:
-            _json = self._serialize.body(continuous_dtmf_recognition_request, "ContinuousDtmfRecognitionRequest")
+            _json = self._serialize.body(continuous_dtmf_recognition_request, 'ContinuousDtmfRecognitionRequest')
 
-        request = build_call_media_stop_continuous_dtmf_recognition_request(
+        _request = build_call_media_stop_continuous_dtmf_recognition_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -2045,26 +2169,30 @@ class CallMediaOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @overload
     async def send_dtmf_tones(
@@ -2116,9 +2244,13 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def send_dtmf_tones(
-        self, call_connection_id: str, send_dtmf_tones_request: Union[_models.SendDtmfTonesRequest, IO], **kwargs: Any
+        self,
+        call_connection_id: str,
+        send_dtmf_tones_request: Union[_models.SendDtmfTonesRequest, IO],
+        **kwargs: Any
     ) -> _models.SendDtmfTonesResult:
         """Send dtmf tones.
 
@@ -2138,18 +2270,17 @@ class CallMediaOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.SendDtmfTonesResult] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.SendDtmfTonesResult] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -2157,9 +2288,9 @@ class CallMediaOperations:
         if isinstance(send_dtmf_tones_request, (IOBase, bytes)):
             _content = send_dtmf_tones_request
         else:
-            _json = self._serialize.body(send_dtmf_tones_request, "SendDtmfTonesRequest")
+            _json = self._serialize.body(send_dtmf_tones_request, 'SendDtmfTonesRequest')
 
-        request = build_call_media_send_dtmf_tones_request(
+        _request = build_call_media_send_dtmf_tones_request(
             call_connection_id=call_connection_id,
             content_type=content_type,
             api_version=self._config.api_version,
@@ -2169,33 +2300,38 @@ class CallMediaOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("SendDtmfTonesResult", pipeline_response)
+        deserialized = self._deserialize(
+            'SendDtmfTonesResult',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
 
 
-class CallRecordingOperations:
+class CallRecordingOperations: 
     """
     .. warning::
         **DO NOT** instantiate this class directly.
@@ -2213,6 +2349,7 @@ class CallRecordingOperations:
         self._config = input_args.pop(0) if input_args else kwargs.pop("config")
         self._serialize = input_args.pop(0) if input_args else kwargs.pop("serializer")
         self._deserialize = input_args.pop(0) if input_args else kwargs.pop("deserializer")
+
 
     @overload
     async def start_recording(
@@ -2239,7 +2376,11 @@ class CallRecordingOperations:
 
     @overload
     async def start_recording(
-        self, start_call_recording: IO, *, content_type: str = "application/json", **kwargs: Any
+        self,
+        start_call_recording: IO,
+        *,
+        content_type: str = "application/json",
+        **kwargs: Any
     ) -> _models.RecordingStateResponse:
         """Start recording the call.
 
@@ -2255,9 +2396,12 @@ class CallRecordingOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
 
+
     @distributed_trace_async
     async def start_recording(
-        self, start_call_recording: Union[_models.StartCallRecordingRequest, IO], **kwargs: Any
+        self,
+        start_call_recording: Union[_models.StartCallRecordingRequest, IO],
+        **kwargs: Any
     ) -> _models.RecordingStateResponse:
         """Start recording the call.
 
@@ -2275,18 +2419,17 @@ class CallRecordingOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = case_insensitive_dict(kwargs.pop("headers", {}) or {})
         _params = kwargs.pop("params", {}) or {}
 
-        content_type: Optional[str] = kwargs.pop("content_type", _headers.pop("Content-Type", None))
-        cls: ClsType[_models.RecordingStateResponse] = kwargs.pop("cls", None)
+        content_type: Optional[str] = kwargs.pop('content_type', _headers.pop('Content-Type', None))
+        cls: ClsType[_models.RecordingStateResponse] = kwargs.pop(
+            'cls', None
+        )
 
         content_type = content_type or "application/json"
         _json = None
@@ -2294,9 +2437,9 @@ class CallRecordingOperations:
         if isinstance(start_call_recording, (IOBase, bytes)):
             _content = start_call_recording
         else:
-            _json = self._serialize.body(start_call_recording, "StartCallRecordingRequest")
+            _json = self._serialize.body(start_call_recording, 'StartCallRecordingRequest')
 
-        request = build_call_recording_start_recording_request(
+        _request = build_call_recording_start_recording_request(
             content_type=content_type,
             api_version=self._config.api_version,
             json=_json,
@@ -2305,33 +2448,44 @@ class CallRecordingOperations:
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("RecordingStateResponse", pipeline_response)
+        deserialized = self._deserialize(
+            'RecordingStateResponse',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @distributed_trace_async
-    async def get_recording_properties(self, recording_id: str, **kwargs: Any) -> _models.RecordingStateResponse:
+    async def get_recording_properties(
+        self,
+        recording_id: str,
+        **kwargs: Any
+    ) -> _models.RecordingStateResponse:
         """Get call recording properties.
 
         Get call recording properties.
@@ -2343,53 +2497,62 @@ class CallRecordingOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[_models.RecordingStateResponse] = kwargs.pop("cls", None)
+        cls: ClsType[_models.RecordingStateResponse] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_recording_get_recording_properties_request(
+        
+        _request = build_call_recording_get_recording_properties_request(
             recording_id=recording_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [200]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
-        deserialized = self._deserialize("RecordingStateResponse", pipeline_response)
+        deserialized = self._deserialize(
+            'RecordingStateResponse',
+            pipeline_response
+        )
 
         if cls:
-            return cls(pipeline_response, deserialized, {})
+            return cls(pipeline_response, deserialized, {}) # type: ignore
 
-        return deserialized
+        return deserialized  # type: ignore
+
+
 
     @distributed_trace_async
     async def stop_recording(  # pylint: disable=inconsistent-return-statements
-        self, recording_id: str, **kwargs: Any
+        self,
+        recording_id: str,
+        **kwargs: Any
     ) -> None:
         """Stop recording the call.
 
@@ -2402,49 +2565,55 @@ class CallRecordingOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_recording_stop_recording_request(
+        
+        _request = build_call_recording_stop_recording_request(
             recording_id=recording_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [204]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @distributed_trace_async
     async def pause_recording(  # pylint: disable=inconsistent-return-statements
-        self, recording_id: str, **kwargs: Any
+        self,
+        recording_id: str,
+        **kwargs: Any
     ) -> None:
         """Pause recording the call.
 
@@ -2457,49 +2626,55 @@ class CallRecordingOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_recording_pause_recording_request(
+        
+        _request = build_call_recording_pause_recording_request(
             recording_id=recording_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
 
     @distributed_trace_async
     async def resume_recording(  # pylint: disable=inconsistent-return-statements
-        self, recording_id: str, **kwargs: Any
+        self,
+        recording_id: str,
+        **kwargs: Any
     ) -> None:
         """Resume recording the call.
 
@@ -2512,42 +2687,46 @@ class CallRecordingOperations:
         :raises ~azure.core.exceptions.HttpResponseError:
         """
         error_map = {
-            401: ClientAuthenticationError,
-            404: ResourceNotFoundError,
-            409: ResourceExistsError,
-            304: ResourceNotModifiedError,
+            401: ClientAuthenticationError, 404: ResourceNotFoundError, 409: ResourceExistsError, 304: ResourceNotModifiedError
         }
-        error_map.update(kwargs.pop("error_map", {}) or {})
+        error_map.update(kwargs.pop('error_map', {}) or {})
 
         _headers = kwargs.pop("headers", {}) or {}
         _params = kwargs.pop("params", {}) or {}
 
-        cls: ClsType[None] = kwargs.pop("cls", None)
+        cls: ClsType[None] = kwargs.pop(
+            'cls', None
+        )
 
-        request = build_call_recording_resume_recording_request(
+        
+        _request = build_call_recording_resume_recording_request(
             recording_id=recording_id,
             api_version=self._config.api_version,
             headers=_headers,
             params=_params,
         )
         path_format_arguments = {
-            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, "str", skip_quote=True),
+            "endpoint": self._serialize.url("self._config.endpoint", self._config.endpoint, 'str', skip_quote=True),
         }
-        request.url = self._client.format_url(request.url, **path_format_arguments)
+        _request.url = self._client.format_url(_request.url, **path_format_arguments)
 
         _stream = False
-        pipeline_response: PipelineResponse = await self._client._pipeline.run(  # pylint: disable=protected-access
-            request, stream=_stream, **kwargs
+        pipeline_response: PipelineResponse = await self._client._pipeline.run(   # pylint: disable=protected-access
+            _request,
+            stream=_stream,
+            **kwargs
         )
 
         response = pipeline_response.http_response
 
         if response.status_code not in [202]:
             if _stream:
-                await response.read()  # Load the body in memory and close the socket
+                await  response.read()  # Load the body in memory and close the socket
             map_error(status_code=response.status_code, response=response, error_map=error_map)
             error = self._deserialize.failsafe_deserialize(_models.CommunicationErrorResponse, pipeline_response)
             raise HttpResponseError(response=response, model=error)
 
         if cls:
-            return cls(pipeline_response, None, {})
+            return cls(pipeline_response, None, {}) # type: ignore
+
+
